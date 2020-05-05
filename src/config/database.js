@@ -10,13 +10,17 @@ const connect = () => {
 
     try {
 
+      // Connect knex to db
       const pg = await new Knex(knexConfig);
+
+      // This little query make sure the connection is established
+      await pg.select(pg.raw('1'));
 
       Model.knex(pg);
 
     } catch (error) {
 
-      logger.error('Could not connect to the db: ', error);
+      throw new Error('Could not connect to the db: ');
 
     }
 
