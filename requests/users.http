@@ -1,0 +1,49 @@
+############### USER ###############
+
+### GET users (all)
+GET {{baseUrl}}/{{version}}/users
+Accept: */*
+content-type: application/json
+Authorization: Bearer {{ user_jwt_token }}
+
+### GET user (one)
+GET {{baseUrl}}/{{version}}/users/5eadbde75d532b725a184179
+Accept: */*
+content-type: application/json
+Authorization: Bearer {{ user_jwt_token }}
+
+### GET user (profile)
+GET {{baseUrl}}/{{version}}/users/profile
+Accept: */*
+content-type: application/json
+Authorization: Bearer {{ user_jwt_token }}
+
+### POST users (create)
+POST {{baseUrl}}/{{version}}/users
+Accept: */*
+content-type: application/json
+
+{
+    "name": "user",
+    "email": "usersdfsdf@email.com",
+    "password": "isUser@1",
+    "isAdmin": false
+}
+
+### PATCH users (update)
+PATCH {{baseUrl}}/{{version}}/users/5eb09c07ff8e6c409a88bc0c
+Accept: */*
+content-type: application/json
+Authorization: Bearer {{ user_jwt_token }}
+
+{
+    "name": "losaasss",
+    "email": "emsssail@gmail.com",
+    "password": "susper@Difsficultpasssw00rd"
+}
+
+### Delete users (destroy)
+DELETE {{baseUrl}}/{{version}}/users/5eb09c07ff8e6c409a88bc0c
+Accept: */*
+content-type: application/json
+Authorization: Bearer {{ user_jwt_token }}

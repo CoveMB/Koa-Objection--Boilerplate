@@ -1,0 +1,34 @@
+############### AUTH ###############
+
+### Login (one) ADMIN
+POST {{baseUrl}}/{{version}}/login
+Accept: */*
+content-type: application/json
+
+{
+    "email": "admin@gmail.com",
+    "password": "isAdmin@1"
+}
+
+### Login (one) USER
+POST {{baseUrl}}/{{version}}/login
+Accept: */*
+content-type: application/json
+
+{
+    "email": "usersdfsdf@email.com",
+    "password": "isUser@1"
+}
+
+### Logout (one)
+POST {{baseUrl}}/{{version}}/logout
+Accept: */*
+content-type: application/json
+Authorization: Bearer {{ user_jwt_token }}
+
+
+### Logout (all)
+POST {{baseUrl}}/{{version}}/logoutAll
+Accept: */*
+content-type: application/json
+Authorization: Bearer {{ user_jwt_token }}
