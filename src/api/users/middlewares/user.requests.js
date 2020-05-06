@@ -7,13 +7,10 @@ const createOneSchema = Joi.object({
     .string()
     .email()
     .required(),
-  name: Joi
-    .string()
-    .required(),
   password: Joi
     .string()
     .required(),
-  isAdmin: Joi
+  admin: Joi
     .boolean()
 });
 

@@ -24,10 +24,9 @@ Accept: */*
 content-type: application/json
 
 {
-    "name": "user",
-    "email": "usersdfsdf@email.com",
+    "email": "usdferssdfdssfsdf@email.com",
     "password": "isUser@1",
-    "isAdmin": false
+    "admin": false
 }
 
 ### PATCH users (update)

@@ -1,76 +1,40 @@
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('config/variables');
-const { LoginError } = require('errors/errorTypes');
 
-async function hashPassword(next) {
+const generateAuthToken = async user => {
 
-  // Check if the user is modified on the user document
-  if (this.isModified('password')) {
+  const token = await jwt.sign({ id: user.id }, jwtSecret);
 
-    this.password = await bcrypt.hash(this.password, 12);
-
-  }
-
-  next();
-
-}
-
-async function generateAuthToken() {
-
-  const token = jwt.sign({ id: this.id }, jwtSecret);
-
-  this.tokens = [ ...this.tokens, { token } ];
-  await this.save();
+  await user
+    .$relatedQuery('tokens')
+    .insert({ token });
 
   return token;
 
-}
+};
 
-async function revokeAuthToken(token) {
+async function revokeAuthToken(user, token) {
 
-  const updatedTokenList = this.tokens.filter(tokenFromList => tokenFromList.token !== token);
-
-  this.tokens = [ ...updatedTokenList ];
-  await this.save();
-
-  return true;
-
-}
-
-async function revokeAllAuthTokens() {
-
-  this.tokens = [];
-  await this.save();
+  await user
+    .$relatedQuery('tokens')
+    .delete()
+    .where('token', token);
 
   return true;
 
 }
 
-async function findByCredentials(ctx, credentials) {
+async function revokeAllAuthTokens(user) {
 
-  const { email, password } = credentials;
+  await user
+    .$relatedQuery('tokens')
+    .delete();
 
-  const user = await this.findOne({ email });
-
-  if (!user) {
-
-    ctx.throw(new LoginError());
-
-  }
-
-  const authenticated = await bcrypt.compare(password, user.password);
-
-  if (!authenticated) {
-
-    ctx.throw(new LoginError());
-
-  }
-
-  return user;
+  return true;
 
 }
 
 module.exports = {
-  hashPassword, findByCredentials, generateAuthToken, revokeAuthToken, revokeAllAuthTokens
+  generateAuthToken, revokeAuthToken, revokeAllAuthTokens
 };

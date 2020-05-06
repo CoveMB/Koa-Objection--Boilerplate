@@ -49,7 +49,7 @@ exports.getAll = async ctx => {
   try {
 
     // Get all the users
-    const users = await User.find();
+    const users = await User.query();
 
     ctx.body = {
       status: 'success', users
@@ -70,15 +70,15 @@ exports.createOne = async ctx => {
     const { requestBody } = ctx;
 
     // Create new user
-    const newUser = await new User(requestBody).save();
+    const user = await User.query().insert(requestBody);
 
     // Send welcome email
-    sendWelcomeEmail(ctx, newUser.email, newUser.name);
+    // sendWelcomeEmail(ctx, user.email, user.name);
 
     // And send it back
     ctx.status = 201;
     ctx.body = {
-      status: 'success', newUser
+      status: 'success', user
     };
 
   } catch (error) {
@@ -98,26 +98,18 @@ exports.updateOne = async ctx => {
     const { id } = params;
 
     // Find the appropriate user
-    const user = await User.findById(id);
+    const userToUpdate = await User.query().findById(id);
 
-    if (!user) {
+    if (!userToUpdate) {
 
       // If no user is found return a 404
       throw new NotFoundError('User');
 
     }
 
-    // Iterate through the user document to update it's fields
-    Object.keys(requestBody).forEach(updateField => {
-
-      user[updateField] = requestBody[updateField];
-
-      return false;
-
-    });
-
-    // Save the user
-    await user.save();
+    // Update the user
+    const user = await userToUpdate.$query()
+      .update(requestBody);
 
     // And return it
     ctx.body = {

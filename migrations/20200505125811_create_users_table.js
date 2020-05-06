@@ -18,7 +18,7 @@ exports.up = function(knex) {
         .primary();
       table.string('token').notNullable();
       table
-        .integer('user_id')
+        .integer('userId')
         .unsigned()
         .references('id')
         .inTable('users')
@@ -32,6 +32,7 @@ exports.up = function(knex) {
 exports.down = function(knex) {
 
   return knex.schema
+    .dropTableIfExists('tokens')
     .dropTableIfExists('users');
 
 };

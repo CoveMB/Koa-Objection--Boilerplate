@@ -1,6 +1,5 @@
 const Knex = require('knex');
 const { Model } = require('objection');
-const logger = require('./logger');
 
 const connect = () => {
 

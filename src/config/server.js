@@ -18,7 +18,7 @@ const app = new Koa();
 app.use(log)        // Log every logRequests
   .use(error)       // Handle trowed errors
   .use(cors)        // Configure cors
-  // .use(compress)    // Allow compress
+  .use(compress)    // Allow compress
   .use(bodyParser); // Parse the body request
 
 /**

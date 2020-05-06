@@ -3,6 +3,12 @@ FROM node:13-slim
 # Set environnement to development
 ENV NODE_ENV=development
 
+# Add some dependencies 9for (bcrypt)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+  build-essential \
+  python && \
+  rm -rf /var/lib/apt/lists/*
+
 # install knex migration manager
 RUN npm install knex -g
 

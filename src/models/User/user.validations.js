@@ -1,7 +1,7 @@
 const passwordComplexity = require('joi-password-complexity');
 const Joi = require('@hapi/joi');
 
-const passwordValidation = (password) => {
+const passwordValidation = password => {
 
   const complexityOptions = {
     min             : 8,
@@ -23,7 +23,7 @@ const passwordValidation = (password) => {
 
 };
 
-const emailValidation = (email) => {
+const emailValidation = email => {
 
   const emailSchema = Joi.string().email();
 
@@ -37,6 +37,22 @@ const emailValidation = (email) => {
 
 };
 
-module.exports = {
-  passwordValidation, emailValidation
+const validateUserInput = payload => {
+
+  // Validate the password
+  if (payload.password) {
+
+    passwordValidation(payload.password);
+
+  }
+
+  // Validate email
+  if (payload.email) {
+
+    emailValidation(payload.email);
+
+  }
+
 };
+
+module.exports = validateUserInput;

@@ -1,109 +1,137 @@
-// const { passwordValidation, emailValidation } = require('./user.validations');
-// const { deletesUsersTasks } = require('./user.utils');
-// const {
-//   hashPassword, findByCredentials, generateAuthToken, revokeAuthToken, revokeAllAuthTokens
-// } = require('./credential.utils');
+const { Model } = require('objection');
+const validateUserInput = require('./user.validations');
+const UserQueryBuilder = require('./user.queries');
+const {
+  generateAuthToken, revokeAuthToken, revokeAllAuthTokens
+} = require('./credential.utils');
 
-// // The schema that define the User model
-// const userSchema = new mongoose.Schema({
+// This plugin allow for automatic password hashing
+const Password = require('objection-password')();
 
-//   isAdmin: {
-//     type: Boolean, default: false
-//   },
-//   name: {
-//     type    : String,
-//     required: true,
-//     trim    : true
-//   },
-//   password: {
-//     type    : String,
-//     required: true,
-//     trim    : true,
-//     validate(password) {
+// This plugin allow for unique validation on model
+const Unique = require('objection-unique')({
+  fields     : [ 'email' ],
+  identifiers: [ 'id' ]
+});
 
-//       // Validate password before hashing
-//       passwordValidation(password);
+class User extends Password(Unique(Model)) {
 
-//     }
-//   },
-//   email: {
-//     type     : String,
-//     unique   : true,
-//     required : true,
-//     trim     : true,
-//     lowercase: true,
-//     validate(email) {
+  static get tableName() {
 
-//       // Validate email
-//       emailValidation(email);
+    return 'users';
 
-//     }
-//   },
-//   age   : { type: Number, },
-//   tokens: [
-//     {
-//       token: {
-//         type: String, required: true
-//       }
-//     }
-//   ]
-// });
+  }
 
-// /**
-//  * User relationships
-//  */
+  static get QueryBuilder() {
 
-// // Create virtual ref for user's tasks
-// userSchema.virtual('tasks', {
-//   ref         : 'Task',
-//   localField  : '_id',
-//   foreignField: 'owner'
-// });
+    // This register the custom query builder
+    return UserQueryBuilder;
 
-// /**
-//  * User JSON
-//  */
+  }
 
-// // Prevent from returning password and tokens when we return a user
-// userSchema.methods.toJSON = function() {
+  static get jsonSchema() {
 
-//   const userObject = this.toObject();
+    return {
+      type    : 'object',
+      required: [ 'email', 'password' ],
 
-//   delete userObject.password;
-//   delete userObject.tokens;
-//   delete userObject.isAdmin;
+      properties: {
+        id   : { type: 'integer' },
+        email: {
+          type: 'string', minLength: 1, maxLength: 255
+        },
+        password: {
+          type: 'string', minLength: 1, maxLength: 255
+        },
+        admin: {
+          type: 'boolean'
+        }
+      }
+    };
 
-//   return userObject;
+  }
 
-// };
+  static get relationMappings() {
 
-// /**
-//  * User methods
-//  */
+    const Token = require('models/Token/Token'); // eslint-disable-line
 
-// // Find a user depending of the passed credentials
-// userSchema.statics.findByCredentials = findByCredentials;
+    return {
+      tokens: {
+        relation  : Model.HasManyRelation,
+        modelClass: Token,
+        join      : {
+          from: 'users.id',
+          to  : 'tokens.userId'
+        }
+      },
+    };
 
-// // Generate a JWT token for the user
-// userSchema.methods.generateAuthToken = generateAuthToken;
+  }
 
-// // Revoke a JWT token for the user
-// userSchema.methods.revokeAuthToken = revokeAuthToken;
+  // Omit fields for json response from model
+  $formatJson(user) {
 
-// // Revoke all JWT token for the user
-// userSchema.methods.revokeAllAuthTokens = revokeAllAuthTokens;
+    super.$formatJson(user);
 
-// /**
-//  * User middleware
-//  */
+    delete user.password;
+    delete user.admin;
 
-// // Hash the password before any saving (during create and update)
-// userSchema.pre('save', hashPassword);
+    return user;
 
-// // Delete the user's tasks on delete
-// userSchema.pre('remove', deletesUsersTasks);
+  }
 
-// // Create the model
-// const User = mongoose.model('User', userSchema);
+  // This hook triggers before an insert
+  async $beforeInsert(queryContext) {
 
-// module.exports = User;
+    // Validate before password hashing
+    validateUserInput(this);
+
+    // Super will take care of hashing password
+    await super.$beforeInsert(queryContext);
+
+  }
+
+  // This hook triggers before an update
+  async $beforeUpdate(opt, queryContext) {
+
+    // Validate before password hashing
+    validateUserInput(this);
+
+    // Super will take care of hashing password
+    await super.$beforeUpdate(opt, queryContext);
+
+  }
+
+  // Modifiers are reusable query snippets that can be used in various places.
+  static get modifiers() {
+
+    return {};
+
+  }
+
+  // Generate an auth token for the user
+  async generateAuthToken() {
+
+    const token = await generateAuthToken(this);
+
+    return token;
+
+  }
+
+  // Revoke an auth token from the user
+  async revokeAuthToken(token) {
+
+    await revokeAuthToken(this, token);
+
+  }
+
+  // Revoke all auth tokens from the user
+  async revokeAllAuthTokens() {
+
+    await revokeAllAuthTokens(this);
+
+  }
+
+}
+
+module.exports = User;

@@ -8,7 +8,7 @@ exports.logIn = async ctx => {
     const { requestBody } = ctx;
 
     // Find the user from the send credentials
-    const user = await User.findByCredentials(ctx, requestBody);
+    const user = await User.query().findByCredentials(ctx, requestBody);
 
     // Generate JWT token
     const token = await user.generateAuthToken();

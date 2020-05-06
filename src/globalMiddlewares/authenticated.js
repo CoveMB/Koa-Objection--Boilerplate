@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const User = require('models/User/User');
+const Token = require('models/Token/Token');
 const { NotAuthenticatedError } = require('errors/errorTypes');
 const { jwtSecret } = require('config/variables');
 
@@ -10,15 +10,36 @@ exports.authenticated = async(ctx, next) => {
     // Get the bearer token
     const token = ctx.get('Authorization').replace('Bearer ', '');
 
-    // Make sure it's valid and get the user id from it
-    const decoded = await jwt.verify(token, jwtSecret);
+    let decoded = {};
+
+    try {
+
+      // Make sure it's valid and get the user id from it
+      decoded = await jwt.verify(token, jwtSecret);
+
+    } catch {
+
+      ctx.throw(new NotAuthenticatedError());
+
+    }
 
     // Find the appropriate user
-    const user = await User.findOne({
-      _id: decoded.id, 'tokens.token': token
-    });
+    // const foundToken = await Token.query()
+    //   .where('token', token)
+    //   .first();
 
-    if (!user) {
+    // if (!foundToken.userId === decoded.id) {
+
+    //   ctx.throw(new NotAuthenticatedError());
+
+    // }
+
+    const foundToken = await Token.query()
+      .where('token', token)
+      .first()
+      .withGraphFetched('user');
+
+    if (!foundToken.user) {
 
       // If no user is found throw a NotAuthenticatedError user
       ctx.throw(new NotAuthenticatedError());
@@ -26,12 +47,12 @@ exports.authenticated = async(ctx, next) => {
     }
 
     // Attach the found user and current token to the response
-    ctx.userRequest = user;
+    ctx.userRequest = foundToken.user;
     ctx.token = token;
 
-  } catch {
+  } catch (error) {
 
-    ctx.throw(new NotAuthenticatedError());
+    ctx.throw(error);
 
   }
 

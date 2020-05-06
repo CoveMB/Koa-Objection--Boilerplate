@@ -4,7 +4,6 @@ const http = require('http');
 const { appName } = require('./config/variables');
 const { port } = require('./config/variables').server;
 const logger = require('./config/logger');
-const server = require('./config/server');
 
 const bootstrap = async serverApp => {
 
@@ -12,9 +11,12 @@ const bootstrap = async serverApp => {
    * Add external services init as async operations (db, redis, etc...)
    */
 
+  // It's important that the database is initialized first to bind the Objection's model to the knex instance
   await connectDB();
 
-  return http.createServer(serverApp.callback()).listen(port);
+  const server = require('./config/server'); // eslint-disable-line
+
+  return http.createServer(server.callback()).listen(port);
 
 };
 
@@ -23,7 +25,7 @@ const bootstrap = async serverApp => {
 
   try {
 
-    const app = await bootstrap(server);
+    const app = await bootstrap();
 
     logger.info(`🛩  ${appName} is listening on port ${app.address().port}, let's play!`);
 
