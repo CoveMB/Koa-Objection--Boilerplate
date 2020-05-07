@@ -23,17 +23,7 @@ exports.authenticated = async(ctx, next) => {
 
     }
 
-    // Find the appropriate user
-    // const foundToken = await Token.query()
-    //   .where('token', token)
-    //   .first();
-
-    // if (!foundToken.userId === decoded.id) {
-
-    //   ctx.throw(new NotAuthenticatedError());
-
-    // }
-
+    // Find the appropriate user attached to the token
     const foundToken = await Token.query()
       .where('token', token)
       .first()

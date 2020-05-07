@@ -19,10 +19,10 @@ exports.getOne = async ctx => {
 
   try {
 
-    const { id } = ctx.params;
+    const { requestId } = ctx;
 
     // Get the user
-    const user = await User.findById(id);
+    const user = await User.query().findById(requestId);
 
     if (!user) {
 
@@ -94,11 +94,10 @@ exports.updateOne = async ctx => {
 
   try {
 
-    const { requestBody, params } = ctx;
-    const { id } = params;
+    const { requestBody, requestId } = ctx;
 
     // Find the appropriate user
-    const userToUpdate = await User.query().findById(id);
+    const userToUpdate = await User.query().findById(requestId);
 
     if (!userToUpdate) {
 
@@ -109,7 +108,7 @@ exports.updateOne = async ctx => {
 
     // Update the user
     const user = await userToUpdate.$query()
-      .update(requestBody);
+      .patchAndFetch(requestBody);
 
     // And return it
     ctx.body = {
@@ -129,13 +128,13 @@ exports.deleteOne = async ctx => {
 
   try {
 
-    const { id } = ctx.params;
+    const { requestId } = ctx;
 
     // Find the user and delete it
-    const user = await User.findByIdAndDelete(id);
+    const user = await User.query().deleteById(requestId);
 
     // Send cancellation email
-    sendCancellationEmail(ctx, user.email, user.name);
+    // sendCancellationEmail(ctx, user.email, user.name);
 
     if (!user) {
 

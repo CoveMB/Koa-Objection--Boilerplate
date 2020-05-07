@@ -1,4 +1,5 @@
 const passwordComplexity = require('joi-password-complexity');
+const { ValidationError } = require('errors/errorTypes');
 const Joi = require('@hapi/joi');
 
 const passwordValidation = password => {
@@ -17,7 +18,9 @@ const passwordValidation = password => {
 
   if (error) {
 
-    throw new Error(error);
+    error.message = error.message.replace('value', 'password');
+
+    throw new ValidationError(error.message);
 
   }
 
@@ -31,7 +34,9 @@ const emailValidation = email => {
 
   if (error) {
 
-    throw new Error(error.details.message);
+    error.details.message = error.message.replace('value', 'email');
+
+    throw new ValidationError(error.details.message);
 
   }
 

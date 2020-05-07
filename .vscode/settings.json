@@ -11,7 +11,7 @@
       "baseUrl": "http://localhost/api",
       "token": "{{$shared prodToken}}",
       "user_jwt_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTIsImlhdCI6MTU4ODc4MDc3OH0.Gw1LBWNNWlD81KdC5JTuq8Zwxvj5l937hKwfcgequfs",
-      "admin_jwt_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlYjA3ODAwMTNkYzFhMThhNWU3ODE3YiIsImlhdCI6MTU4ODYyNDE5N30.-AJbaeEShC-HnC6SOd9q5iMao7ZFR8KZnNztgoeYwCQ"
+      "admin_jwt_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTMsImlhdCI6MTU4ODg1NTI0NX0.oDPQJGckt-uby7QSXCjJMI9QEvnVvIjlcuAtDR8CMGA"
     },
     "production": {
       "host": "example.com",

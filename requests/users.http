@@ -7,7 +7,7 @@ content-type: application/json
 Authorization: Bearer {{ user_jwt_token }}
 
 ### GET user (one)
-GET {{baseUrl}}/{{version}}/users/5eadbde75d532b725a184179
+GET {{baseUrl}}/{{version}}/users/52
 Accept: */*
 content-type: application/json
 Authorization: Bearer {{ user_jwt_token }}
@@ -24,25 +24,24 @@ Accept: */*
 content-type: application/json
 
 {
-    "email": "usdferssdfdssfsdf@email.com",
+    "email": "user@email.com",
     "password": "isUser@1",
     "admin": false
 }
 
 ### PATCH users (update)
-PATCH {{baseUrl}}/{{version}}/users/5eb09c07ff8e6c409a88bc0c
+PATCH {{baseUrl}}/{{version}}/users/51
 Accept: */*
 content-type: application/json
 Authorization: Bearer {{ user_jwt_token }}
 
 {
-    "name": "losaasss",
-    "email": "emsssail@gmail.com",
+    "email": "emsssail3@gmail.com",
     "password": "susper@Difsficultpasssw00rd"
 }
 
 ### Delete users (destroy)
-DELETE {{baseUrl}}/{{version}}/users/5eb09c07ff8e6c409a88bc0c
+DELETE {{baseUrl}}/{{version}}/users/100
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ user_jwt_token }}
+Authorization: Bearer {{ admin_jwt_token }}

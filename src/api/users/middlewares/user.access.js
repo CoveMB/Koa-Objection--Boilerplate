@@ -5,13 +5,11 @@ const isSelfOrAdmin = async(ctx, next) => {
   try {
 
     const { userRequest, params } = ctx;
-    const { id } = params;
+    const id  = Number(params.id);
 
-    if (userRequest.id === id || userRequest.isAdmin) {
+    if (userRequest.id === id || userRequest.admin) {
 
-      ctx.id = id;
-
-      await next();
+      ctx.requestId = id;
 
     } else {
 
@@ -24,6 +22,8 @@ const isSelfOrAdmin = async(ctx, next) => {
     ctx.throw(error);
 
   }
+
+  await next();
 
 };
 
