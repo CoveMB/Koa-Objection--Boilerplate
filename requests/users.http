@@ -24,8 +24,7 @@ Accept: */*
 content-type: application/json
 
 {
-    "email": "user@email.com",
-    "password": "isUser@1",
+    "email": "user39@email.com",
     "admin": false
 }
 
@@ -41,7 +40,7 @@ Authorization: Bearer {{ user_jwt_token }}
 }
 
 ### Delete users (destroy)
-DELETE {{baseUrl}}/{{version}}/users/100
+DELETE {{baseUrl}}/{{version}}/users/10
 Accept: */*
 content-type: application/json
 Authorization: Bearer {{ admin_jwt_token }}

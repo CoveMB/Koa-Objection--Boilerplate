@@ -67,10 +67,10 @@ exports.createOne = async ctx => {
 
   try {
 
-    const { requestBody } = ctx;
+    const { validatedRequest } = ctx;
 
     // Create new user
-    const user = await User.query().insert(requestBody);
+    const user = await User.query().insert(validatedRequest);
 
     // Send welcome email
     // sendWelcomeEmail(ctx, user.email, user.name);
@@ -94,7 +94,7 @@ exports.updateOne = async ctx => {
 
   try {
 
-    const { requestBody, requestId } = ctx;
+    const { validatedRequest, requestId } = ctx;
 
     // Find the appropriate user
     const userToUpdate = await User.query().findById(requestId);
@@ -108,7 +108,7 @@ exports.updateOne = async ctx => {
 
     // Update the user
     const user = await userToUpdate.$query()
-      .patchAndFetch(requestBody);
+      .patchAndFetch(validatedRequest);
 
     // And return it
     ctx.body = {

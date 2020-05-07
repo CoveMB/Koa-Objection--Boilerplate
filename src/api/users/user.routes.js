@@ -1,6 +1,6 @@
 const controller = require('./user.controller');
-const { authenticated } = require('globalMiddlewares');
-const { validateRequest, isSelfOrAdmin } = require('./middlewares');
+const { authenticated, validate } = require('globalMiddlewares');
+const { createUpdateSchema, isSelfOrAdmin } = require('./middlewares');
 
 module.exports = Router => {
 
@@ -10,7 +10,7 @@ module.exports = Router => {
 
   router
     .post('/',
-      validateRequest,
+      validate(createUpdateSchema, 'body'),
       controller.createOne)
     .get('/',
       authenticated,
@@ -24,7 +24,7 @@ module.exports = Router => {
       isSelfOrAdmin,
       controller.getOne)
     .patch('/:id',
-      validateRequest,
+      validate(createUpdateSchema, 'body'),
       authenticated,
       isSelfOrAdmin,
       controller.updateOne)

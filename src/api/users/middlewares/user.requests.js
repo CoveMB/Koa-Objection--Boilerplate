@@ -1,8 +1,7 @@
 const Joi = require('@hapi/joi');
-const { ValidationError } = require('errors/errorTypes');
 
 // Define schema to validate request body
-const createOneSchema = Joi.object({
+const createUpdateSchema = Joi.object({
   email: Joi
     .string()
     .email()
@@ -14,27 +13,4 @@ const createOneSchema = Joi.object({
     .boolean()
 });
 
-// Validate the request body
-const validateRequest = async(ctx, next) => {
-
-  try {
-
-    const body = ctx.request.body;
-
-    await createOneSchema.validateAsync(body);
-
-    ctx.requestBody = body;
-
-  } catch (error) {
-
-    const validationError = new ValidationError(error.details[0].message);
-
-    ctx.throw(validationError);
-
-  }
-
-  await next();
-
-};
-
-module.exports = { validateRequest };
+module.exports = { createUpdateSchema };
