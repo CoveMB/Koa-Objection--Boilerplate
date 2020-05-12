@@ -7,8 +7,10 @@ exports.up = function(knex) {
       table.increments('id').unsigned()
         .primary();
       table.boolean('admin').defaultTo(false);
-      table.string('email').notNullable();
+      table.string('email').unique()
+        .notNullable();
       table.string('password').notNullable();
+      table.timestamp('created_at').defaultTo(knex.fn.now());
 
     })
 
@@ -22,7 +24,7 @@ exports.up = function(knex) {
         .unsigned()
         .references('id')
         .inTable('users')
-        .onDelete('SET NULL')
+        .onDelete('CASCADE')
         .index();
 
     });
