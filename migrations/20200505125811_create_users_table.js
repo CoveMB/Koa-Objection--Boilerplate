@@ -11,6 +11,7 @@ exports.up = function(knex) {
         .notNullable();
       table.string('password').notNullable();
       table.timestamp('created_at').defaultTo(knex.fn.now());
+      table.timestamp('updated_at').defaultTo(null);
 
     })
 
@@ -20,12 +21,14 @@ exports.up = function(knex) {
         .primary();
       table.string('token').notNullable();
       table
-        .integer('userId')
+        .integer('user_id')
         .unsigned()
         .references('id')
         .inTable('users')
         .onDelete('CASCADE')
         .index();
+      table.timestamp('created_at').defaultTo(knex.fn.now());
+      table.timestamp('updated_at').defaultTo(null);
 
     });
 

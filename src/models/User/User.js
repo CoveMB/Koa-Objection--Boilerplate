@@ -1,4 +1,4 @@
-const { Model } = require('objection');
+const BaseModel = require('models/BaseModel');
 const validateUserInput = require('./user.validations');
 const UserQueryBuilder = require('./user.queries');
 const {
@@ -14,7 +14,7 @@ const Unique = require('objection-unique')({
   identifiers: [ 'id' ]
 });
 
-class User extends Password(Unique(Model)) {
+class User extends Password(Unique(BaseModel)) {
 
   static get tableName() {
 
@@ -61,7 +61,7 @@ class User extends Password(Unique(Model)) {
         modelClass: Token,
         join      : {
           from: 'users.id',
-          to  : 'tokens.userId'
+          to  : 'tokens.user_id'
         }
       },
     };

@@ -1,6 +1,6 @@
-const { Model } = require('objection');
+const BaseModel = require('models/BaseModel');
 
-class Token extends Model {
+class Token extends BaseModel {
 
   // Table name is the only required property.
   static get tableName() {
@@ -44,7 +44,7 @@ class Token extends Model {
         // absolute file path to a module that exports one.
         modelClass: User,
         join      : {
-          from: 'tokens.userId',
+          from: 'tokens.user_id',
           to  : 'users.id'
         }
       },
