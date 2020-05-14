@@ -1,5 +1,5 @@
 
-const User = require('models/User/User');
+const { User } = require('models');
 
 exports.logIn = async ctx => {
 

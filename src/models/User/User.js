@@ -53,11 +53,11 @@ class User extends Password(Unique(BaseModel)) {
 
   static get relationMappings() {
 
-    const Token = require('models/Token/Token'); // eslint-disable-line
+    const { Token } = require('models');; // eslint-disable-line
 
     return {
       tokens: {
-        relation  : Model.HasManyRelation,
+        relation  : BaseModel.HasManyRelation,
         modelClass: Token,
         join      : {
           from: 'users.id',

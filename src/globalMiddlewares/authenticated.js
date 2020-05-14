@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const Token = require('models/Token/Token');
+const { Token } = require('models');
 const { NotAuthenticatedError } = require('errors/errorTypes');
 const { jwtSecret } = require('config/variables');
 

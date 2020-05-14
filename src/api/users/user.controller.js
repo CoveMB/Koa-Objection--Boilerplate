@@ -1,4 +1,4 @@
-const User = require('models/User/User');
+const { User } = require('models');
 const { NotFoundError } = require('errors/errorTypes');
 const { sendWelcomeEmail, sendCancellationEmail } = require('emails/user.emails');
 

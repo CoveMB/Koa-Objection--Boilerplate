@@ -34,11 +34,11 @@ class Token extends BaseModel {
 
     // One way to prevent circular references
     // is to require the model classes here.
-    const User = require('models/User/User');
+    const { User } = require('models');
 
     return {
       user: {
-        relation: Model.BelongsToOneRelation,
+        relation: BaseModel.BelongsToOneRelation,
 
         // The related model. This can be either a Model subclass constructor or an
         // absolute file path to a module that exports one.
