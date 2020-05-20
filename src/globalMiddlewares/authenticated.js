@@ -29,7 +29,7 @@ exports.authenticated = async(ctx, next) => {
       .first()
       .withGraphFetched('user');
 
-    if (!foundToken.user) {
+    if (!foundToken || !foundToken.user) {
 
       // If no user is found throw a NotAuthenticatedError user
       ctx.throw(new NotAuthenticatedError());
