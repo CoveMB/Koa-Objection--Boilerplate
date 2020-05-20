@@ -4,19 +4,19 @@
 GET {{baseUrl}}/{{version}}/users
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ user_jwt_token }}
+Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
 
 ### GET user (one)
 GET {{baseUrl}}/{{version}}/users/52
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ user_jwt_token }}
+Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
 
 ### GET user (profile)
 GET {{baseUrl}}/{{version}}/users/profile
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ user_jwt_token }}
+Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
 
 ### POST users (create)
 POST {{baseUrl}}/{{version}}/users
@@ -32,7 +32,7 @@ content-type: application/json
 PATCH {{baseUrl}}/{{version}}/users/51
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ user_jwt_token }}
+Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
 
 {
     "email": "emsssail3@gmail.com",
@@ -43,4 +43,4 @@ Authorization: Bearer {{ user_jwt_token }}
 DELETE {{baseUrl}}/{{version}}/users/10
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ admin_jwt_token }}
+Authorization: Bearer {{ $dotenv ADMIN_JWT_TOKEN }}

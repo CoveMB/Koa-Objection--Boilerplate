@@ -4,7 +4,7 @@
 POST {{baseUrl}}/{{version}}/tasks
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ user_jwt_token }}
+Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
 
 {
     "description": "Be someone else"
@@ -14,7 +14,7 @@ Authorization: Bearer {{ user_jwt_token }}
 GET {{baseUrl}}/{{version}}/tasks
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ user_jwt_token }}
+Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
 
 ### GET tasks (one)
 GET {{baseUrl}}/{{version}}/tasks/5eac2a64c6e65421b74fda5c
@@ -25,8 +25,7 @@ content-type: application/json
 PATCH {{baseUrl}}/{{version}}/tasks/5eb0957b8003321aa50baa76
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ user_jwt_token }}
-
+Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
 {
     "completed": false
 }
@@ -35,8 +34,7 @@ Authorization: Bearer {{ user_jwt_token }}
 DELETE {{baseUrl}}/{{version}}/tasks/5eb0957b8003321aa50baa76
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ user_jwt_token }}
-
+Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
 {
     "restore": true
 }

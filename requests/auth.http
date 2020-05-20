@@ -24,11 +24,11 @@ content-type: application/json
 POST {{baseUrl}}/{{version}}/logout
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ user_jwt_token }}
+Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
 
 
 ### Logout (all)
 POST {{baseUrl}}/{{version}}/logoutAll
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ user_jwt_token }}
+Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
