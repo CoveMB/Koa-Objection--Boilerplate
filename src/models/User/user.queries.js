@@ -1,7 +1,5 @@
 const { QueryBuilder } = require('objection');
-
-// const bcrypt = require('bcryptjs');
-const { LoginError } = require('errors/errorTypes');
+const { LoginError } = require('config/errors/errorTypes');
 
 class UserQueryBuilder extends QueryBuilder {
 

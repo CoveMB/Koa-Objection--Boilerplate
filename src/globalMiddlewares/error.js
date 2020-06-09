@@ -1,4 +1,4 @@
-const { errorEvent } = require('errors/errorEvent');
+const { errorEvent } = require('config/errors/errorEvent');
 const { ForeignKeyViolationError, ValidationError } = require('objection');
 
 exports.error = async(ctx, next) => {
@@ -38,6 +38,7 @@ exports.error = async(ctx, next) => {
       ctx.status = error.status || 500;
       ctx.body = {
         status : 'failed',
+        error  : error.expose ? error.name : 'ServerError',
         message: error.expose ? error.message : 'Internal server error',
       };
 

@@ -4,11 +4,9 @@ const Joi = require('@hapi/joi');
 const createUpdateSchema = Joi.object({
   email: Joi
     .string()
-    .email()
-    .required(),
+    .email(),
   password: Joi
-    .string()
-    .required(),
+    .string(),
   admin: Joi
     .boolean()
 });

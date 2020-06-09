@@ -12,9 +12,10 @@
       "token": "{{$shared prodToken}}",
     },
     "production": {
-      "host": "example.com",
+      "baseUrl": "https://mvp.tooly.ai/api",
+      "host": "mvp.tooly.ai",
+      "version": "v1",
       "token": "{{$shared prodToken}}",
-      "secretKey": "prodSecret"
     }
   }
 }

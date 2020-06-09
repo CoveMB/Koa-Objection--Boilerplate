@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { Token } = require('models');
-const { NotAuthenticatedError } = require('errors/errorTypes');
+const { NotAuthenticatedError } = require('config/errors/errorTypes');
 const { jwtSecret } = require('config/variables');
 
 exports.authenticated = async(ctx, next) => {
@@ -25,8 +25,7 @@ exports.authenticated = async(ctx, next) => {
 
     // Find the appropriate user attached to the token
     const foundToken = await Token.query()
-      .where('token', token)
-      .first()
+      .findOne('token', token)
       .withGraphFetched('user');
 
     if (!foundToken || !foundToken.user) {

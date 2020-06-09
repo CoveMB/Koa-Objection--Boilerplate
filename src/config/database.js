@@ -1,25 +1,29 @@
 const Knex = require('knex');
+const logger = require('config/logger');
 const { Model } = require('objection');
+const { ConfigError } = require('config/errors/errorTypes');
 
 const connect = () => {
 
-  const knexConfig = require('../../knexfile'); // eslint-disable-line
+  const knexConfig = require('../../knexfile')(); // eslint-disable-line
 
-  return async() => {
+  return async val => {
 
     try {
 
       // Connect knex to db
-      const pg = await new Knex(knexConfig);
+      const knex = await new Knex(knexConfig);
 
       // This little query make sure the connection is established
-      await pg.select(pg.raw('1'));
+      await knex.select(knex.raw('1'));
 
-      Model.knex(pg);
+      Model.knex(knex);
+
+      return knex;
 
     } catch (error) {
 
-      throw new Error('Could not connect to the db: ');
+      throw new ConfigError(`Could not connect to the db, ${error}`);
 
     }
 

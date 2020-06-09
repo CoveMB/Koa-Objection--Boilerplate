@@ -1,4 +1,4 @@
-const { loginSchema } = require('./middlewares');
+const { loginSchema, logoutSchema } = require('./middlewares');
 const { authenticated, validate } = require('globalMiddlewares');
 const controller = require('./auth.controller');
 
@@ -8,8 +8,8 @@ module.exports = Router => {
 
   router
     .post('/login', validate(loginSchema, 'body'), controller.logIn)
-    .post('/logout', authenticated, controller.logOut)
-    .post('/logoutAll', authenticated, controller.logOutAll);
+    .post('/logout', validate(logoutSchema, 'body'), authenticated, controller.logOut)
+    .post('/logoutAll', validate(logoutSchema, 'body'), authenticated, controller.logOutAll);
 
   return router;
 

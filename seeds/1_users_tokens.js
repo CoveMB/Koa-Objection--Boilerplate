@@ -11,37 +11,34 @@ const {
 exports.seed = function(knex) {
 
   // Deletes ALL existing entries
-  return knex('user').del()
+  return knex('users').del()
     .then(() =>
 
       // Inserts seed entries
-      knex('user').insert([
+      knex('users').insert([
         {
           email   : 'thirdparty@email.com',
-          name    : 'Third Party',
           admin   : false,
           password: THIRD_PARTY_PASSWORD
         },
         {
           email   : 'admin@email.com',
           admin   : false,
-          name    : 'Admin',
           password: ADMIN_PASSWORD
         },
         {
           email   : 'user@email.com',
           admin   : false,
-          name    : 'User',
           password: USER_PASSWORD
         },
       ])
     )
     .then(() =>
-      knex('token').del())
+      knex('tokens').del())
     .then(() =>
 
     // Inserts seed entries
-      knex('token').insert([
+      knex('tokens').insert([
 
         {
           token  : THIRD_PARTY_TOKEN,

@@ -1,6 +1,5 @@
 const { User } = require('models');
-const { NotFoundError } = require('errors/errorTypes');
-const { sendWelcomeEmail, sendCancellationEmail } = require('emails/user.emails');
+const { NotFoundError } = require('config/errors/errorTypes');
 
 // The user the the parameter comes from the authenticated middleware
 exports.getProfile = async ctx => {
@@ -72,13 +71,13 @@ exports.createOne = async ctx => {
     // Create new user
     const user = await User.query().insert(validatedRequest);
 
-    // Send welcome email
-    // sendWelcomeEmail(ctx, user.email, user.name);
+    // Generate JWT token
+    const token = await user.generateAuthToken();
 
     // And send it back
     ctx.status = 201;
     ctx.body = {
-      status: 'success', user
+      status: 'success', user, token
     };
 
   } catch (error) {
@@ -132,9 +131,6 @@ exports.deleteOne = async ctx => {
 
     // Find the user and delete it
     const user = await User.query().deleteById(requestId);
-
-    // Send cancellation email
-    // sendCancellationEmail(ctx, user.email, user.name);
 
     if (!user) {
 

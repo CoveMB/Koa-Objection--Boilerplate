@@ -10,7 +10,7 @@ exports.logIn = async ctx => {
     // Find the user from the send credentials
     const user = await User.query().findByCredentials(ctx, validatedRequest);
 
-    // Generate JWT token
+    // Generate JWT token for authentication
     const token = await user.generateAuthToken();
 
     // Send back the token
@@ -33,7 +33,7 @@ exports.logOut = async ctx => {
 
     const { userRequest, token } = ctx;
 
-    userRequest.revokeAuthToken(token);
+    await userRequest.revokeAuthToken(token);
 
     ctx.body = {
       status: 'success'
@@ -54,7 +54,7 @@ exports.logOutAll = async ctx => {
 
     const { userRequest } = ctx;
 
-    userRequest.revokeAllAuthTokens();
+    await userRequest.revokeAllAuthTokens();
 
     ctx.body = {
       status: 'success'

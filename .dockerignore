@@ -5,3 +5,5 @@ logos.png
 LICENSE
 README.md
 requests
+*.env
+.env

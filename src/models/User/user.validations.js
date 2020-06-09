@@ -1,6 +1,7 @@
 const passwordComplexity = require('joi-password-complexity');
-const { ValidationError } = require('errors/errorTypes');
+const { ValidationError } = require('config/errors/errorTypes');
 const Joi = require('@hapi/joi');
+const { validateInput } = require('../model.utils');
 
 const passwordValidation = password => {
 
@@ -26,21 +27,7 @@ const passwordValidation = password => {
 
 };
 
-const emailValidation = email => {
-
-  const emailSchema = Joi.string().email();
-
-  const { error } = emailSchema.validate(email);
-
-  if (error) {
-
-    error.details.message = error.message.replace('value', 'email');
-
-    throw new ValidationError(error.details.message);
-
-  }
-
-};
+const emailSchema = Joi.string().email();
 
 const validateUserInput = payload => {
 
@@ -54,7 +41,7 @@ const validateUserInput = payload => {
   // Validate email
   if (payload.email) {
 
-    emailValidation(payload.email);
+    validateInput(emailSchema, payload.email);
 
   }
 

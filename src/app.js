@@ -1,9 +1,9 @@
 require('app-module-path').addPath(`${__dirname}/`);
-const connectDB = require('./config/database');
+const connectDB = require('config/database');
 const http = require('http');
-const { appName } = require('./config/variables');
-const { port } = require('./config/variables').server;
-const logger = require('./config/logger');
+const { appName } = require('config/variables');
+const { port } = require('config/variables').server;
+const logger = require('config/logger');
 
 const bootstrap = async serverApp => {
 
@@ -34,7 +34,8 @@ const bootstrap = async serverApp => {
     setImmediate(() => {
 
       logger.error('Unable to run the server because of the following error:');
-      logger.error(error);
+      logger.error(error.message);
+
       process.exit();
 
     });

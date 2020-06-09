@@ -4,6 +4,7 @@ const UserQueryBuilder = require('./user.queries');
 const {
   generateAuthToken, revokeAuthToken, revokeAllAuthTokens
 } = require('./credential.utils');
+const { capitalize } = require('utils');
 
 // This plugin allow for automatic password hashing
 const Password = require('objection-password')();
@@ -53,7 +54,10 @@ class User extends Password(Unique(BaseModel)) {
 
   static get relationMappings() {
 
-    const { Token } = require('models');; // eslint-disable-line
+    const {
+      Token
+      // eslint-disable-next-line global-require
+    } = require('models');
 
     return {
       tokens: {
@@ -63,7 +67,7 @@ class User extends Password(Unique(BaseModel)) {
           from: 'users.id',
           to  : 'tokens.user_id'
         }
-      },
+      }
     };
 
   }
@@ -75,6 +79,8 @@ class User extends Password(Unique(BaseModel)) {
 
     delete user.password;
     delete user.admin;
+    delete user.created_at;
+    delete user.updated_at;
 
     return user;
 
@@ -86,6 +92,18 @@ class User extends Password(Unique(BaseModel)) {
     // Validate before password hashing
     validateUserInput(this);
 
+    if (this.country) {
+
+      this.country = capitalize(this.country);
+
+    }
+
+    if (this.name) {
+
+      this.name = capitalize(this.name);
+
+    }
+
     // Super will take care of hashing password
     await super.$beforeInsert(queryContext);
 
@@ -96,6 +114,18 @@ class User extends Password(Unique(BaseModel)) {
 
     // Validate before password hashing
     validateUserInput(this);
+
+    if (this.country) {
+
+      this.country = capitalize(this.country);
+
+    }
+
+    if (this.name) {
+
+      this.country = capitalize(this.name);
+
+    }
 
     // Super will take care of hashing password
     await super.$beforeUpdate(opt, queryContext);

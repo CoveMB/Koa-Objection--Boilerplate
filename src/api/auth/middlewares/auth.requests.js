@@ -10,4 +10,9 @@ const loginSchema = Joi.object({
     .required()
 });
 
-module.exports = { loginSchema };
+const logoutSchema = Joi.object({
+});
+
+module.exports = {
+  loginSchema, logoutSchema
+};

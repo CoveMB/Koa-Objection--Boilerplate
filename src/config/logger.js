@@ -1,7 +1,9 @@
 const appRoot = require('app-root-path');
 const winston = require('winston');
-const { isDevelopment } = require('./variables');
+const { isDevelopment, sentryDNS, sentryEnv } = require('./variables');
+const Sentry = require('winston-sentry-log');
 
+// Base logger
 const logger = winston.createLogger({
   datePattern: 'yyyy-MM-dd.',
   level      : 'info',
@@ -10,30 +12,37 @@ const logger = winston.createLogger({
   defaultMeta: { service: 'api-service' },
 });
 
-// If we're not in production then log to the `console` with the format:
-// `${info.level}: ${info.message} JSON.stringify({ ...rest }) `
-//
-if (isDevelopment) {
+// Log to the console
+logger.add(new winston.transports.Console({
+  name    : 'console',
+  format  : winston.format.simple(),
+  colorize: true,
+  level   : 'debug'
+}));
 
-  logger.add(new winston.transports.Console({
+if (!isDevelopment) {
 
-    format  : winston.format.simple(),
-    colorize: true,
-    level   : 'debug',
-  }));
-
-} else {
-
-  //
-  // - Write to all logs with level `info` and below to `combined.log`
-  // - Write all logs error (and below) to `error.log`.
-  //
+  // Write to all logs with level `info` and below to `combined.log`
   logger.add(new winston.transports.File({
+    name    : 'app.log',
     filename: `${appRoot}/logs/app.log`,
     level   : 'error'
   }));
 
-  logger.add(winston.transports.File({ filename: `${appRoot}/logs/combined.log` }));
+  // Write all logs error (and below) to `error.log`.
+  logger.add(new winston.transports.File({
+    name: 'error.log', filename: `${appRoot}/logs/combined.log`
+  }));
+
+  // Send errors to Sentry
+  logger.add(new Sentry({
+    config: {
+      dsn        : sentryDNS,
+      environment: sentryEnv
+    },
+    name : 'sentry',
+    level: 'error'
+  }));
 
 }
 

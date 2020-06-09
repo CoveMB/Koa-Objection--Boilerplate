@@ -1,4 +1,4 @@
-const { ValidationError } = require('errors/errorTypes');
+const { ValidationError } = require('config/errors/errorTypes');
 
 exports.validate = (schema, property) => async(ctx, next) => {
 

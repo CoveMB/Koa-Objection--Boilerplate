@@ -42,7 +42,7 @@ services:
     depends_on:
       - db
     environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_EMAIL: ${DB_USER}
       PGADMIN_DEFAULT_PASSWORD: ${DB_PASSWORD}
     volumes:
       - pgadmin:/var/lib/pgadmin

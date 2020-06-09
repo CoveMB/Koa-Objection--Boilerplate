@@ -1,4 +1,4 @@
-const { NotAuthorizeError } = require('errors/errorTypes');
+const { NotAuthorizeError } = require('config/errors/errorTypes');
 
 const isSelfOrAdmin = async(ctx, next) => {
 

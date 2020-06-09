@@ -4,43 +4,55 @@
 GET {{baseUrl}}/{{version}}/users
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
+Authorization: Bearer {{$dotenv USER_TOKEN }}
 
 ### GET user (one)
 GET {{baseUrl}}/{{version}}/users/52
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
+Authorization: Bearer {{$dotenv USER_TOKEN }}
 
 ### GET user (profile)
 GET {{baseUrl}}/{{version}}/users/profile
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
+Authorization: Bearer {{$dotenv USER_TOKEN }}
 
-### POST users (create)
+### POST users (create) User
 POST {{baseUrl}}/{{version}}/users
 Accept: */*
 content-type: application/json
 
 {
-    "email": "user39@email.com",
+    "email": "user@email.com",
+    "password": "isUser@2000",
     "admin": false
 }
 
-### PATCH users (update)
-PATCH {{baseUrl}}/{{version}}/users/51
+### POST users (create) Admin
+POST {{baseUrl}}/{{version}}/users
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ $dotenv USER_JWT_TOKEN }}
 
 {
-    "email": "emsssail3@gmail.com",
-    "password": "susper@Difsficultpasssw00rd"
+    "email": "admin@email.com",
+    "password": "isAdmin@2000",
+    "admin": true
+}
+
+### PATCH users (update)
+PATCH {{baseUrl}}/{{version}}/users/1
+Accept: */*
+content-type: application/json
+Authorization: Bearer {{$dotenv USER_TOKEN }}
+
+{
+    "email": "user@email.com",
+    "password": "isUser@10"
 }
 
 ### Delete users (destroy)
 DELETE {{baseUrl}}/{{version}}/users/10
 Accept: */*
 content-type: application/json
-Authorization: Bearer {{ $dotenv ADMIN_JWT_TOKEN }}
+Authorization: Bearer {{$dotenv ADMIN_TOKEN}}

@@ -39,6 +39,7 @@ module.exports = {
     "keyword-spacing": "warn",
     "no-trailing-spaces": "warn",
     "space-before-blocks": "warn",
+    "space-before-function-paren": "warn",
     "key-spacing": [
       "warn",
       {
