@@ -164,4 +164,4 @@ class User extends Password(Unique(BaseModel)) {
 
 }
 
-module.exports = User;
+module.exports = { User };

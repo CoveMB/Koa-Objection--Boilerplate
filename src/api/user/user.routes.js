@@ -1,6 +1,7 @@
 const controller = require('./user.controller');
 const { authenticated, validate } = require('globalMiddlewares');
-const { createUpdateSchema, isSelfOrAdmin } = require('./middlewares');
+const { isSelfOrAdmin } = require('./middlewares/user.access');
+const { createUpdateSchema } = require('./middlewares/user.requests');
 
 module.exports = Router => {
 

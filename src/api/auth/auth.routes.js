@@ -1,4 +1,4 @@
-const { loginSchema, logoutSchema } = require('./middlewares');
+const { loginSchema, logoutSchema } = require('./middlewares/auth.requests');
 const { authenticated, validate } = require('globalMiddlewares');
 const controller = require('./auth.controller');
 

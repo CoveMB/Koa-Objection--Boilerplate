@@ -29,7 +29,7 @@ if (error) {
 
 }
 
-const config = {
+const server = {
 
   appName      : envVars.APP_NAME,
   clientUrl    : envVars.CLIENT_URL || 'http://localhost',
@@ -43,4 +43,4 @@ const config = {
 
 };
 
-module.exports = config;
+module.exports = server;

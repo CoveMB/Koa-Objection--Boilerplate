@@ -46,4 +46,4 @@ class Token extends BaseModel {
 
 }
 
-module.exports = Token;
+module.exports = { Token };

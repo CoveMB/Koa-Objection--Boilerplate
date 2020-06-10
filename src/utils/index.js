@@ -1,19 +1,7 @@
-const fs = require('fs');
-const path = require('path');
+const date = require('./date');
+const stringFormater = require('./stringFormater');
 
-const baseName = path.basename(__filename);
-let allUtils = {};
-
-fs.readdirSync(__dirname)
-  .filter(file => file.indexOf('.') !== 0 && file !== baseName)
-  .forEach(file => {
-
-    const utils = require(path.join(__dirname, file)); // eslint-disable-line
-
-    allUtils = {
-      ...allUtils, ...utils
-    };
-
-  });
-
-module.exports = allUtils;
+module.exports = {
+  ...date,
+  ...stringFormater,
+};

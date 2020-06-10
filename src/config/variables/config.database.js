@@ -29,7 +29,7 @@ if (error) {
 
 }
 
-const config = {
+const database = {
 
   dbName    : envVars.DB_NAME,
   dbHost    : envVars.DB_HOST,
@@ -39,4 +39,4 @@ const config = {
 
 };
 
-module.exports = config;
+module.exports = database;

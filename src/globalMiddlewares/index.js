@@ -1,19 +1,13 @@
-const fs = require('fs');
-const path = require('path');
+const authenticated = require('./authenticated');
+const cors = require('./cors');
+const error = require('./error');
+const log = require('./log');
+const validate = require('./validate');
 
-const baseName = path.basename(__filename);
-let allMiddlewares = {};
-
-fs.readdirSync(__dirname)
-  .filter(file => file.indexOf('.') !== 0 && file !== baseName)
-  .forEach(file => {
-
-    const middleware = require(path.join(__dirname, file)); // eslint-disable-line
-
-    allMiddlewares = {
-      ...allMiddlewares, ...middleware
-    };
-
-  });
-
-module.exports = allMiddlewares;
+module.exports = {
+  ...authenticated,
+  ...cors,
+  ...error,
+  ...log,
+  ...validate
+};

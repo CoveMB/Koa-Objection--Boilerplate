@@ -29,7 +29,7 @@ if (error) {
 
 }
 
-const config = {
+const secrets = {
 
   jwtSecret     : envVars.JWT_SECRET,
   sendGridSecret: envVars.SENDGRID_SECRET,
@@ -38,4 +38,4 @@ const config = {
 
 };
 
-module.exports = config;
+module.exports = secrets;
