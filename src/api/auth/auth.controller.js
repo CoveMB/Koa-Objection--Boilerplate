@@ -1,14 +1,9 @@
 
-const { User } = require('models');
-
 exports.logIn = async ctx => {
 
   try {
 
-    const { validatedRequest } = ctx;
-
-    // Find the user from the send credentials
-    const user = await User.query().findByCredentials(ctx, validatedRequest);
+    const { user } = ctx;
 
     // Generate JWT token for authentication
     const token = await user.generateAuthToken();
@@ -31,6 +26,7 @@ exports.logOut = async ctx => {
 
   try {
 
+    // The authenticated middleware attache the user that made the request to the context
     const { userRequest, token } = ctx;
 
     await userRequest.revokeAuthToken(token);
@@ -52,6 +48,7 @@ exports.logOutAll = async ctx => {
 
   try {
 
+    // The authenticated middleware attache the user that made the request to the context
     const { userRequest } = ctx;
 
     await userRequest.revokeAllAuthTokens();

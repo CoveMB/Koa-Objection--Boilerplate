@@ -4,12 +4,21 @@ const { NotFoundError } = require('config/errors/errorTypes');
 // The user the the parameter comes from the authenticated middleware
 exports.getProfile = async ctx => {
 
-  const { userRequest } = ctx;
+  try {
 
-  ctx.body = {
-    status: 'success',
-    userRequest
-  };
+    // The authenticated middleware attache the user that made the request to the context
+    const { userRequest } = ctx;
+
+    ctx.body = {
+      status: 'success',
+      userRequest
+    };
+
+  } catch (error) {
+
+    ctx.throw(error);
+
+  }
 
 };
 
@@ -18,17 +27,8 @@ exports.getOne = async ctx => {
 
   try {
 
-    const { requestId } = ctx;
-
-    // Get the user
-    const user = await User.query().findById(requestId);
-
-    if (!user) {
-
-      // If no user is found throw a NotFoundError
-      throw new NotFoundError('User');
-
-    }
+    // The user has been fetch in the records middleware
+    const { user } = ctx;
 
     // Send it
     ctx.body = {
@@ -47,8 +47,8 @@ exports.getAll = async ctx => {
 
   try {
 
-    // Get all the users
-    const users = await User.query();
+    // The users has been fetch in the records middleware
+    const { users } = ctx;
 
     ctx.body = {
       status: 'success', users
@@ -93,25 +93,16 @@ exports.updateOne = async ctx => {
 
   try {
 
-    const { validatedRequest, requestId } = ctx;
-
-    // Find the appropriate user
-    const userToUpdate = await User.query().findById(requestId);
-
-    if (!userToUpdate) {
-
-      // If no user is found return a 404
-      throw new NotFoundError('User');
-
-    }
+    // The user has been fetch in the records middleware
+    const { user, validatedRequest } = ctx;
 
     // Update the user
-    const user = await userToUpdate.$query()
+    const updatedUser = await user.$query()
       .patchAndFetch(validatedRequest);
 
     // And return it
     ctx.body = {
-      status: 'success', user
+      status: 'success', user: updatedUser
     };
 
   } catch (error) {

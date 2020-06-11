@@ -1,7 +1,8 @@
 const controller = require('./user.controller');
 const { authenticated, validate } = require('globalMiddlewares');
-const { isSelfOrAdmin } = require('./middlewares/user.access');
-const { createUpdateSchema } = require('./middlewares/user.requests');
+const requests = require('./middlewares/user.requests');
+const access = require('./middlewares/user.access');
+const records = require('./middlewares/user.records');
 
 module.exports = Router => {
 
@@ -10,28 +11,31 @@ module.exports = Router => {
   });
 
   router
-    .post('/',
-      validate(createUpdateSchema, 'body'),
-      controller.createOne)
-    .get('/',
-      authenticated,
-      isSelfOrAdmin,
-      controller.getAll)
     .get('/profile',
       authenticated,
       controller.getProfile)
     .get('/:id',
       authenticated,
-      isSelfOrAdmin,
+      access.isSelfOrAdmin,
+      records.getByIdRecords,
       controller.getOne)
-    .patch('/:id',
-      validate(createUpdateSchema, 'body'),
+    .get('/',
       authenticated,
-      isSelfOrAdmin,
+      access.isSelfOrAdmin,
+      records.getAllRecords,
+      controller.getAll)
+    .post('/',
+      validate(requests.createUpdateSchema, 'body'),
+      controller.createOne)
+    .patch('/:id',
+      validate(requests.createUpdateSchema, 'body'),
+      authenticated,
+      access.isSelfOrAdmin,
+      records.getByIdRecords,
       controller.updateOne)
     .delete('/:id',
       authenticated,
-      isSelfOrAdmin,
+      access.isSelfOrAdmin,
       controller.deleteOne);
 
   return router;

@@ -42,6 +42,20 @@ class EmailNotSentError extends Error {
 
 }
 
+class ThirdPartyError extends Error {
+
+  // This error is generated if an email could not been sent
+  constructor(message) {
+
+    super(`A third party involved in the request could not been reach: ${message}`);
+    this.name = 'ThirdPartyError';
+    this.status = 515;
+    this.expose = false;
+
+  }
+
+}
+
 // Exposed errors //
 
 class NotFoundError extends Error {
@@ -114,20 +128,6 @@ class NotAuthorizeError extends Error {
 
 }
 
-class LabelNotFoundError extends Error {
-
-  // This error is generated if a action related to a survey fails
-  constructor(message) {
-
-    super('We did not found any label attached to this submission id, did you submit the survey related to it? Is the submission id related to a label?');
-    this.name = 'LabelNotFoundError';
-    this.status = 499;
-    this.expose = true;
-
-  }
-
-}
-
 module.exports = {
   ValidationError,
   NotFoundError,
@@ -137,5 +137,5 @@ module.exports = {
   EmailNotSentError,
   ConfigError,
   QueryError,
-  LabelNotFoundError
+  ThirdPartyError
 };

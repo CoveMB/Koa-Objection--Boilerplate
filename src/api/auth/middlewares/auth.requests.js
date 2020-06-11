@@ -1,6 +1,6 @@
 const Joi = require('@hapi/joi');
 
-const loginSchema = Joi.object({
+exports.loginSchema = Joi.object({
   email: Joi
     .string()
     .email()
@@ -10,9 +10,5 @@ const loginSchema = Joi.object({
     .required()
 });
 
-const logoutSchema = Joi.object({
+exports.logoutSchema = Joi.object({
 });
-
-module.exports = {
-  loginSchema, logoutSchema
-};

@@ -1,6 +1,6 @@
 const { NotAuthorizeError } = require('config/errors/errorTypes');
 
-const isSelfOrAdmin = async(ctx, next) => {
+exports.isSelfOrAdmin = async(ctx, next) => {
 
   try {
 
@@ -26,5 +26,3 @@ const isSelfOrAdmin = async(ctx, next) => {
   await next();
 
 };
-
-module.exports = { isSelfOrAdmin };

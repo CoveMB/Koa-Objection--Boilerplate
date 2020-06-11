@@ -1,5 +1,6 @@
-const { loginSchema, logoutSchema } = require('./middlewares/auth.requests');
+const requests = require('./middlewares/auth.requests');
 const { authenticated, validate } = require('globalMiddlewares');
+const records = require('./middlewares/auth.records');
 const controller = require('./auth.controller');
 
 module.exports = Router => {
@@ -7,9 +8,18 @@ module.exports = Router => {
   const router = new Router();
 
   router
-    .post('/login', validate(loginSchema, 'body'), controller.logIn)
-    .post('/logout', validate(logoutSchema, 'body'), authenticated, controller.logOut)
-    .post('/logoutAll', validate(logoutSchema, 'body'), authenticated, controller.logOutAll);
+    .post('/login',
+      validate(requests.loginSchema, 'body'),
+      records.loginRecords,
+      controller.logIn)
+    .post('/logout',
+      validate(requests.logoutSchema, 'body'),
+      authenticated,
+      controller.logOut)
+    .post('/logoutAll',
+      validate(requests.logoutSchema, 'body'),
+      authenticated,
+      controller.logOutAll);
 
   return router;
 
