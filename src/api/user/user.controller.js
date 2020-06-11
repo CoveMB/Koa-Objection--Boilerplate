@@ -28,7 +28,7 @@ exports.getOne = async ctx => {
   try {
 
     // The user has been fetch in the records middleware
-    const { user } = ctx;
+    const { user } = ctx.records;
 
     // Send it
     ctx.body = {
@@ -48,7 +48,7 @@ exports.getAll = async ctx => {
   try {
 
     // The users has been fetch in the records middleware
-    const { users } = ctx;
+    const { users } = ctx.records;
 
     ctx.body = {
       status: 'success', users
@@ -94,7 +94,8 @@ exports.updateOne = async ctx => {
   try {
 
     // The user has been fetch in the records middleware
-    const { user, validatedRequest } = ctx;
+    const { validatedRequest } = ctx;
+    const { user } = ctx.records;
 
     // Update the user
     const updatedUser = await user.$query()

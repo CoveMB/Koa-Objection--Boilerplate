@@ -17,7 +17,7 @@ exports.getByIdRecords = async(ctx, next) => {
 
     }
 
-    ctx.user = user;
+    ctx.records = { user };
 
   } catch (error) {
 
@@ -36,7 +36,7 @@ exports.getAllRecords = async(ctx, next) => {
     // Get all the users
     const users = await User.query();
 
-    ctx.users = users;
+    ctx.records = { users };
 
   } catch (error) {
 

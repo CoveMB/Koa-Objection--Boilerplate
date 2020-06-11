@@ -3,7 +3,7 @@ exports.logIn = async ctx => {
 
   try {
 
-    const { user } = ctx;
+    const { user } = ctx.records;
 
     // Generate JWT token for authentication
     const token = await user.generateAuthToken();
