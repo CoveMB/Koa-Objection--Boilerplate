@@ -1,5 +1,6 @@
 const { errorEvent } = require('config/errors/errorEvent');
 const { ForeignKeyViolationError, ValidationError } = require('objection');
+const { capitalize } = require('utils');
 
 exports.error = async(ctx, next) => {
 
@@ -19,7 +20,10 @@ exports.error = async(ctx, next) => {
       ctx.body = {
         status: 'failed',
         error : 'ValidationError',
-        errors: error.data
+        errors: error.data,
+
+        // Will construct a message concatenating all the Objection validation errors
+        message: Object.keys(error.data).reduce((acc, validationErrors) => ` ${acc + error.data[validationErrors].reduce((a, validationError) => `${capitalize(validationError.message)}`, '')}`, '')
       };
 
       // Return errors from objection orm

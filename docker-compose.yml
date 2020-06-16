@@ -10,7 +10,7 @@ services:
       - db
     env_file: .env
     ports:
-      - 80:${PORT}
+      - ${PORT}:${PORT}
       - 9229:9229
     volumes:
       - .:/node/app:delegated

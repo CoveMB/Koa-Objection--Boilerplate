@@ -1,5 +1,9 @@
 // Will capitalize every part of the word
-const capitalize = name => name.split(' ').map(namePart => namePart.charAt(0).toUpperCase() + namePart.slice(1))
+const capitalizeAll = word => word.split(' ').map(wordPart => wordPart.charAt(0).toUpperCase() + wordPart.slice(1))
   .join(' ');
 
-module.exports = { capitalize };
+const capitalize = word => word.charAt(0).toUpperCase() + word.slice(1);
+
+module.exports = {
+  capitalize, capitalizeAll
+};

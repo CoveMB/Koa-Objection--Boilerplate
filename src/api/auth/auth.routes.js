@@ -19,7 +19,11 @@ module.exports = Router => {
     .post('/logoutAll',
       validate(requests.logoutSchema, 'body'),
       authenticated,
-      controller.logOutAll);
+      controller.logOutAll)
+    .post('/check-token',
+      authenticated,
+      controller.checkToken
+    );
 
   return router;
 

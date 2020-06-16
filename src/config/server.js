@@ -13,10 +13,10 @@ const app = new Koa();
 /**
  * Register global middlewares
 */
-app.use(bodyParser) // Parse the body request
+app.use(cors)       // Configure cors
+  .use(bodyParser)  // Parse the body request
   .use(log)         // Log every logRequests
   .use(error)       // Handle trowed errors
-  .use(cors)        // Configure cors
   .use(compress);   // Allow compress
 
 /**

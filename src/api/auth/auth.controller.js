@@ -64,3 +64,21 @@ exports.logOutAll = async ctx => {
   }
 
 };
+
+// Check if the token sent is still valid
+exports.checkToken = async ctx => {
+
+  try {
+
+    // The token is still valid
+    ctx.body = {
+      status: 'success'
+    };
+
+  } catch (error) {
+
+    ctx.throw(error);
+
+  }
+
+};
