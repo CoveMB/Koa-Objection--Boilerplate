@@ -36,6 +36,7 @@ module.exports = Router => {
     .delete('/:id',
       authenticated,
       access.isSelfOrAdmin,
+      records.getByIdRecords,
       controller.deleteOne);
 
   return router;

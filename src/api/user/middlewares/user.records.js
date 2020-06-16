@@ -1,5 +1,5 @@
-const { NotFoundError } = require('config/errors/errorTypes');
 const { User } = require('models');
+const { validateFoundInstances } = require('models/model.utils');
 
 exports.getByIdRecords = async(ctx, next) => {
 
@@ -10,12 +10,11 @@ exports.getByIdRecords = async(ctx, next) => {
     // Get the user
     const user = await User.query().findById(requestId);
 
-    if (!user) {
-
-      // If no user is found throw a NotFoundError
-      throw new NotFoundError('User');
-
-    }
+    validateFoundInstances([
+      {
+        instance: user, type: 'User', search: requestId
+      }
+    ]);
 
     ctx.records = { user };
 

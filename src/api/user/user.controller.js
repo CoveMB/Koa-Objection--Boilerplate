@@ -1,5 +1,4 @@
 const { User } = require('models');
-const { NotFoundError } = require('config/errors/errorTypes');
 
 // The user the the parameter comes from the authenticated middleware
 exports.getProfile = async ctx => {
@@ -119,16 +118,11 @@ exports.deleteOne = async ctx => {
 
   try {
 
-    const { requestId } = ctx;
+    // Get user from records middleware
+    const { user } = ctx.records;
 
-    // Find the user and delete it
-    const user = await User.query().deleteById(requestId);
-
-    if (!user) {
-
-      throw new NotFoundError('User');
-
-    }
+    // Delete him/her
+    await User.query().deleteById(user.id);
 
     ctx.body = {
       status: 'success'

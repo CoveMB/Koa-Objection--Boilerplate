@@ -1,4 +1,4 @@
-const { ValidationError } = require('config/errors/errorTypes');
+const { ValidationError, NotFoundError } = require('config/errors/errorTypes');
 
 const validateInput = (schema, input) => {
 
@@ -12,4 +12,22 @@ const validateInput = (schema, input) => {
 
 };
 
-module.exports = { validateInput };
+const validateFoundInstances = instancesToCheck => {
+
+  instancesToCheck.forEach(instanceToCheck => {
+
+    const { instance, type, search } = instanceToCheck;
+
+    if (instance === undefined) {
+
+      throw new NotFoundError(`${type}${search ? `, Requested: ${search}` : ''}`);
+
+    }
+
+  });
+
+};
+
+module.exports = {
+  validateInput, validateFoundInstances
+};

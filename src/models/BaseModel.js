@@ -9,10 +9,10 @@ class BaseModel extends Model {
 
       async findOrCreate(data) {
 
-        // Try to find existing Company
+        // Try to find existing instance
         let instance = await this.findOne(data);
 
-        // If no company exist create one
+        // If no instance exist create one
         if (!instance) {
 
           instance = await this.insert(data);
