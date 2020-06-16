@@ -121,3 +121,33 @@ test('Should revoke all tokens', async() => {
   expect(dbUser.tokens.length).toBe(0);
 
 });
+
+test('Should validate existing token', async() => {
+
+  const token = await getFreshToken(request);
+
+  const response = await request
+    .post('/api/v1/check-token')
+    .set('Authorization', `Bearer ${token}`);
+
+  expect(response.status).toBe(200);
+
+});
+
+test('Should not validate revoked tokens', async() => {
+
+  const token = await getFreshToken(request);
+
+  await request
+    .post('/api/v1/logout')
+    .set('Authorization', `Bearer ${token}`);
+
+  const response = await request
+    .post('/api/v1/check-token')
+    .set('Authorization', `Bearer ${token}`);
+
+  expect(response.status).toBe(401);
+  expect(response.body.message).toBe('You need to be authenticated to perform this action');
+  expect(response.body.error).toBe(new NotAuthenticatedError().name);
+
+});
