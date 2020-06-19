@@ -140,9 +140,11 @@ class User extends Password(Unique(BaseModel)) {
   }
 
   // Generate an auth token for the user
-  async generateAuthToken() {
+  // By default the token will be temporary
+  // If temporary it will have an expiration date
+  async generateAuthToken(temporary = false) {
 
-    const token = await generateAuthToken(this);
+    const token = await generateAuthToken(this, temporary);
 
     return token;
 

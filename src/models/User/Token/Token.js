@@ -17,7 +17,11 @@ class Token extends BaseModel {
       properties: {
         id    : { type: 'integer' },
         userId: { type: 'integer' },
-        token : {
+        device: {
+          type: 'string', minLength: 1, maxLength: 255
+        },
+        expiration: { type: 'date' },
+        token     : {
           type: 'string', minLength: 1, maxLength: 255
         },
       }

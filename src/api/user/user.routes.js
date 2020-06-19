@@ -11,33 +11,45 @@ module.exports = Router => {
   });
 
   router
-    .get('/profile',
+    .get(
+      '/profile',
       authenticated,
-      controller.getProfile)
-    .get('/:id',
+      controller.getProfile
+    )
+    .get(
+      '/:id',
       authenticated,
       access.isSelfOrAdmin,
       records.getByIdRecords,
-      controller.getOne)
-    .get('/',
+      controller.getOne
+    )
+    .get(
+      '/',
       authenticated,
       access.isSelfOrAdmin,
       records.getAllRecords,
-      controller.getAll)
-    .post('/',
+      controller.getAll
+    )
+    .post(
+      '/',
       validate(requests.createUpdateSchema, 'body'),
-      controller.createOne)
-    .patch('/:id',
+      controller.createOne
+    )
+    .patch(
+      '/:id',
       validate(requests.createUpdateSchema, 'body'),
       authenticated,
       access.isSelfOrAdmin,
       records.getByIdRecords,
-      controller.updateOne)
-    .delete('/:id',
+      controller.updateOne
+    )
+    .delete(
+      '/:id',
       authenticated,
       access.isSelfOrAdmin,
       records.getByIdRecords,
-      controller.deleteOne);
+      controller.deleteOne
+    );
 
   return router;
 

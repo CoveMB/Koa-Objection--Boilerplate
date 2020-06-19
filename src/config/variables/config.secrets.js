@@ -8,7 +8,10 @@ const envSchema = joi
   .object({
     JWT_SECRET     : joi.string().required(),
     SENDGRID_SECRET: joi.string().required(),
-    SENTRY_DNS     : joi.string().uri()
+    EMAIL_FROM     : joi.string()
+      .allow('')
+      .optional(),
+    SENTRY_DNS: joi.string().uri()
       .allow('')
       .required(),
     SENTRY_ENVIRONMENT: joi.string()
@@ -34,7 +37,8 @@ const secrets = {
   jwtSecret     : envVars.JWT_SECRET,
   sendGridSecret: envVars.SENDGRID_SECRET,
   sentryDNS     : envVars.SENTRY_DNS,
-  sentryEnv     : envVars.SENTRY_ENVIRONMENT
+  sentryEnv     : envVars.SENTRY_ENVIRONMENT,
+  emailFrom     : envVars.EMAIL_FROM
 
 };
 

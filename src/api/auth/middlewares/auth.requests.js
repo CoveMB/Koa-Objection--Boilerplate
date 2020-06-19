@@ -12,3 +12,17 @@ exports.loginSchema = Joi.object({
 
 exports.logoutSchema = Joi.object({
 });
+
+exports.resetPasswordSchema = Joi.object({
+  email: Joi
+    .string()
+    .email()
+    .required()
+});
+
+exports.requestResetPasswordSchema = Joi.object({
+  email: Joi
+    .string()
+    .email()
+    .required()
+});

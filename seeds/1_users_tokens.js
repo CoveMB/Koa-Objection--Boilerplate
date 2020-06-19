@@ -1,12 +1,12 @@
+// bcrypt is included in the objection-password package
+const bcrypt = require('bcrypt');
 
 const {
-  THIRD_PARTY_PASSWORD,
-  THIRD_PARTY_TOKEN,
-  ADMIN_PASSWORD,
   ADMIN_TOKEN,
-  USER_PASSWORD,
   USER_TOKEN,
 } = process.env;
+
+const password = bcrypt.hashSync(process.env.INITIAL_PASSWORD, 12);
 
 exports.seed = function(knex) {
 
@@ -14,22 +14,18 @@ exports.seed = function(knex) {
   return knex('users').del()
     .then(() =>
 
+    // You need to set your jwt token before
       // Inserts seed entries
       knex('users').insert([
         {
-          email   : 'thirdparty@email.com',
-          admin   : false,
-          password: THIRD_PARTY_PASSWORD
+          email: 'admin@email.com',
+          admin: false,
+          password
         },
         {
-          email   : 'admin@email.com',
-          admin   : false,
-          password: ADMIN_PASSWORD
-        },
-        {
-          email   : 'user@email.com',
-          admin   : false,
-          password: USER_PASSWORD
+          email: 'user@email.com',
+          admin: false,
+          password
         },
       ])
     )
@@ -39,18 +35,13 @@ exports.seed = function(knex) {
 
     // Inserts seed entries
       knex('tokens').insert([
-
         {
-          token  : THIRD_PARTY_TOKEN,
+          token  : ADMIN_TOKEN,
           user_id: 1
         },
         {
-          token  : ADMIN_TOKEN,
-          user_id: 2
-        },
-        {
           token  : USER_TOKEN,
-          user_id: 3
+          user_id: 2
         }
       ])
     );

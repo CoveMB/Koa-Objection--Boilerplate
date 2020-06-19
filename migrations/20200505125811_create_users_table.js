@@ -28,6 +28,8 @@ exports.up = function(knex) {
         .inTable('users')
         .onDelete('CASCADE')
         .index();
+      table.dateTime('expiration').nullable();
+      table.string('device').nullable();
       table.timestamp('created_at').defaultTo(knex.fn.now());
       table.timestamp('updated_at').defaultTo(null);
 

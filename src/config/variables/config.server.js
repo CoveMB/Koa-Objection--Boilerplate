@@ -11,6 +11,7 @@ const envSchema = joi
       'production',
       'test'
     ),
+    ROOT_URL   : joi.string(),
     CLIENT_URL : joi.string(),
     PORT       : joi.number(),
     API_VERSION: joi.number(),
@@ -37,6 +38,7 @@ const server = {
   isTest       : envVars.NODE_ENV === 'test',
   isDevelopment: envVars.NODE_ENV === 'development',
   server       : {
+    rootUrl   : envVars.ROOT_URL || 'http://localhost',
     port      : envVars.PORT || 5000,
     apiVersion: envVars.API_VERSION || 'v1',
   },

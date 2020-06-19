@@ -10,7 +10,7 @@ const {
 beforeAll(setUpDb);
 afterAll(tearDownDb);
 
-test('Should login user, generating fresh token', async() => {
+test('Should login user, generating fresh unlimited token', async() => {
 
   const { credentials, email, password } = getUserData();
 
@@ -35,6 +35,7 @@ test('Should login user, generating fresh token', async() => {
       // Singing up a user a first token was generated so we compare to the second one
       token: userDb.tokens[0].token
     });
+  expect(userDb.tokens[0].expiration).toBeNull();
 
   changeTestUser({ token: response.body.token });
 
@@ -149,5 +150,29 @@ test('Should not validate revoked tokens', async() => {
   expect(response.status).toBe(401);
   expect(response.body.message).toBe('You need to be authenticated to perform this action');
   expect(response.body.error).toBe(new NotAuthenticatedError().name);
+
+});
+
+test('Should request a password reset', async() => {
+
+  const { email } = getUserData();
+
+  const response = await request
+    .post('/api/v1/request-reset-password')
+    .send({
+      email
+    });
+
+  // find other way to query last token
+  const userDb = await User.query()
+    .findOne({ email })
+    .withGraphFetched('tokens');
+
+  const dateCreated = new Date(userDb.tokens[0].created_at);
+  const dateExpiration = new Date(userDb.tokens[0].expiration);
+
+  expect(response.status).toBe(200);
+  expect(userDb.tokens[0].expiration).not.toBeNull();
+  expect(dateExpiration.getHours()).toBe(dateCreated.getHours() + 1);
 
 });

@@ -8,21 +8,40 @@ module.exports = Router => {
   const router = new Router();
 
   router
-    .post('/login',
+    .post(
+      '/login',
       validate(requests.loginSchema, 'body'),
       records.loginRecords,
-      controller.logIn)
-    .post('/logout',
+      controller.logIn
+    )
+    .post(
+      '/logout',
       validate(requests.logoutSchema, 'body'),
       authenticated,
-      controller.logOut)
-    .post('/logoutAll',
+      controller.logOut
+    )
+    .post(
+      '/logoutAll',
       validate(requests.logoutSchema, 'body'),
       authenticated,
-      controller.logOutAll)
-    .post('/check-token',
+      controller.logOutAll
+    )
+    .post(
+      '/check-token',
       authenticated,
       controller.checkToken
+    )
+    .post(
+      '/request-reset-password',
+      validate(requests.requestResetPasswordSchema, 'body'),
+      records.requestResetPasswordRecords,
+      controller.requestResetPassword
+    )
+    .get(
+      '/reset-password',
+      validate(requests.resetPasswordSchema, 'body'),
+      records.resetPasswordRecords,
+      controller.resetPassword
     );
 
   return router;

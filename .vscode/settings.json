@@ -8,7 +8,7 @@
     "local": {
       "host": "localhost",
       "version": "v1",
-      "baseUrl": "http://localhost/api",
+      "baseUrl": "http://localhost:3000/api",
       "token": "{{$shared prodToken}}",
     },
     "production": {

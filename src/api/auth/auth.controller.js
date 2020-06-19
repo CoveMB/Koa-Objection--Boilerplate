@@ -1,3 +1,4 @@
+const { sendResetPasswordEmail } = require('models/User/emails/user.emails');
 
 exports.logIn = async ctx => {
 
@@ -71,6 +72,48 @@ exports.checkToken = async ctx => {
   try {
 
     // The token is still valid
+    ctx.body = {
+      status: 'success'
+    };
+
+  } catch (error) {
+
+    ctx.throw(error);
+
+  }
+
+};
+
+exports.requestResetPassword = async ctx => {
+
+  try {
+
+    const { user } = ctx.records;
+
+    // Generate JWT token for to send to the email to able password reset
+    const temporary = true;
+    const token = await user.generateAuthToken(temporary);
+
+    sendResetPasswordEmail(ctx, user.email, token);
+
+    ctx.body = {
+      status: 'success'
+    };
+
+  } catch (error) {
+
+    ctx.throw(error);
+
+  }
+
+};
+
+exports.resetPassword = async ctx => {
+
+  try {
+
+    const { user } = ctx.records;
+
     ctx.body = {
       status: 'success'
     };

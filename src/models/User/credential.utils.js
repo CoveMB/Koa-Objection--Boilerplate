@@ -1,13 +1,25 @@
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('config/variables');
 
-const generateAuthToken = async user => {
+const generateAuthToken = async(user, temporary) => {
 
   const token = await jwt.sign({ id: user.id }, jwtSecret);
 
+  // If the token is temporary it will expire in one hour
+  let date = null;
+
+  if (temporary) {
+
+    date = new Date();
+    date.setHours(date.getHours() + 1);
+
+  }
+
   await user
     .$relatedQuery('tokens')
-    .insert({ token });
+    .insert({
+      token, expiration: date
+    });
 
   return token;
 
