@@ -8,7 +8,7 @@ exports.loginRecords = async(ctx, next) => {
     const { validatedRequest } = ctx;
 
     // Find the user from the send credentials
-    const user = await User.query().findByCredentials(ctx, validatedRequest);
+    const user = await User.query().findByCredentials(validatedRequest);
 
     ctx.records = { user };
 

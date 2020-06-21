@@ -32,7 +32,7 @@ module.exports = Router => {
       controller.checkToken
     )
     .post(
-      '/request-reset-password',
+      '/request-password-reset',
       validate(requests.requestResetPasswordSchema, 'body'),
       records.requestResetPasswordRecords,
       controller.requestResetPassword

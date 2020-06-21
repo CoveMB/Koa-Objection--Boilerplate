@@ -23,17 +23,9 @@ exports.authenticated = async(ctx, next) => {
 
     }
 
-    // Find the appropriate user attached to the token
+    // Find the appropriate user attached to the token if the token is valid
     const foundToken = await Token.query()
-      .findOne('token', token)
-      .withGraphFetched('user');
-
-    if (!foundToken || !foundToken.user) {
-
-      // If no user is found throw a NotAuthenticatedError user
-      ctx.throw(new NotAuthenticatedError());
-
-    }
+      .tokenAndUserIfValid(token);
 
     // Attach the found user and current token to the response
     ctx.userRequest = foundToken.user;

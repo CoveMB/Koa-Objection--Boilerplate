@@ -33,6 +33,13 @@ Accept: */*
 content-type: application/json
 Authorization: Bearer {{ $dotenv USER_TOKEN }}
 
+### Check if the sent token is valid
+POST {{baseUrl}}/{{version}}/check-token
+Accept: */*
+content-type: application/json
+Authorization: Bearer {{ $dotenv USER_TOKEN }}
+
+
 ### Reset Password
 POST {{baseUrl}}/{{version}}/request-reset-password
 Accept: */*

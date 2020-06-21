@@ -34,7 +34,7 @@ const sender = emailClient => ({
         subject: 'Reset your password',
         html   : `
         <h2>Reset your password</h2>
-        <a href="${clientUrl}/reset-password?token=${token}">click here</a>`,
+        <a href="${clientUrl}/reset-password?token=${token.token}">click here</a>`,
       });
 
     } catch (error) {

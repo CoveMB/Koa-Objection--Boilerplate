@@ -100,6 +100,20 @@ class NotAuthenticatedError extends Error {
 
 }
 
+class ExpiredTokenError extends Error {
+
+  // This error is generated when a token sent with the request is expired
+  constructor() {
+
+    super('The token sent with the request is expired');
+    this.name = 'ExpiredTokenError';
+    this.status = 401;
+    this.expose = true;
+
+  }
+
+}
+
 class ValidationError extends Error {
 
   // This error is generated when a validation have failed
@@ -129,6 +143,7 @@ class NotAuthorizeError extends Error {
 }
 
 module.exports = {
+  ExpiredTokenError,
   ValidationError,
   NotFoundError,
   LoginError,

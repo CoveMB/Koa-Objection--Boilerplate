@@ -40,7 +40,7 @@ const server = {
   server       : {
     rootUrl   : envVars.ROOT_URL || 'http://localhost',
     port      : envVars.PORT || 5000,
-    apiVersion: envVars.API_VERSION || 'v1',
+    apiVersion: `v${envVars.API_VERSION}` || 'v1',
   },
 
 };

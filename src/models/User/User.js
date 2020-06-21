@@ -1,12 +1,9 @@
 const BaseModel = require('models/BaseModel');
 const validateUserInput = require('./user.validations');
 const UserQueryBuilder = require('./user.queries');
-const {
-  generateAuthToken, revokeAuthToken, revokeAllAuthTokens
-} = require('./credential.utils');
 const { capitalize } = require('utils');
 
-// This plugin allow for automatic password hashing
+// This plugin allow for automatic password hashing, if you want to allow an empty password you need to pass it allowEmptyPassword
 const Password = require('objection-password')();
 
 // This plugin allow for unique validation on model
@@ -19,7 +16,7 @@ class User extends Password(Unique(BaseModel)) {
 
   static get tableName() {
 
-    return 'users';
+    return 'user';
 
   }
 
@@ -64,8 +61,8 @@ class User extends Password(Unique(BaseModel)) {
         relation  : BaseModel.HasManyRelation,
         modelClass: Token,
         join      : {
-          from: 'users.id',
-          to  : 'tokens.user_id'
+          from: 'user.id',
+          to  : 'token.user_id'
         }
       }
     };
@@ -136,31 +133,6 @@ class User extends Password(Unique(BaseModel)) {
   static get modifiers() {
 
     return {};
-
-  }
-
-  // Generate an auth token for the user
-  // By default the token will be temporary
-  // If temporary it will have an expiration date
-  async generateAuthToken(temporary = false) {
-
-    const token = await generateAuthToken(this, temporary);
-
-    return token;
-
-  }
-
-  // Revoke an auth token from the user
-  async revokeAuthToken(token) {
-
-    await revokeAuthToken(this, token);
-
-  }
-
-  // Revoke all auth tokens from the user
-  async revokeAllAuthTokens() {
-
-    await revokeAllAuthTokens(this);
 
   }
 

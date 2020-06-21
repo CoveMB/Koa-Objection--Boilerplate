@@ -1,10 +1,18 @@
 const BaseModel = require('models/BaseModel');
+const TokenQueryBuilder = require('./token.queries');
 
 class Token extends BaseModel {
 
   static get tableName() {
 
-    return 'tokens';
+    return 'token';
+
+  }
+
+  static get QueryBuilder() {
+
+    // This register the custom query builder
+    return TokenQueryBuilder;
 
   }
 
@@ -40,8 +48,8 @@ class Token extends BaseModel {
 
         modelClass: User,
         join      : {
-          from: 'tokens.user_id',
-          to  : 'users.id'
+          from: 'token.user_id',
+          to  : 'user.id'
         }
       },
     };

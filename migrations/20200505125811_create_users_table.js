@@ -2,7 +2,7 @@
 exports.up = function(knex) {
 
   return knex.schema
-    .createTable('users', table => {
+    .createTable('user', table => {
 
       table.increments('id').unsigned()
         .primary();
@@ -16,7 +16,7 @@ exports.up = function(knex) {
 
     })
 
-    .createTable('tokens', table => {
+    .createTable('token', table => {
 
       table.increments('id').unsigned()
         .primary();
@@ -25,7 +25,7 @@ exports.up = function(knex) {
         .integer('user_id')
         .unsigned()
         .references('id')
-        .inTable('users')
+        .inTable('user')
         .onDelete('CASCADE')
         .index();
       table.dateTime('expiration').nullable();
@@ -40,7 +40,7 @@ exports.up = function(knex) {
 exports.down = function(knex) {
 
   return knex.schema
-    .dropTableIfExists('tokens')
-    .dropTableIfExists('users');
+    .dropTableIfExists('token')
+    .dropTableIfExists('user');
 
 };

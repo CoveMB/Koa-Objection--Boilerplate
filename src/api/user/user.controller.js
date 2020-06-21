@@ -1,4 +1,4 @@
-const { User } = require('models');
+const { User, Token } = require('models');
 
 // The user the the parameter comes from the authenticated middleware
 exports.getProfile = async ctx => {
@@ -70,8 +70,9 @@ exports.createOne = async ctx => {
     // Create new user
     const user = await User.query().insert(validatedRequest);
 
-    // Generate JWT token
-    const token = await user.generateAuthToken();
+    // Generate JWT token for the new user
+    const token = await Token.query()
+      .generateAuthToken(user);
 
     // And send it back
     ctx.status = 201;

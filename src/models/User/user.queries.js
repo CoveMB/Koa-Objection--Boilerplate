@@ -3,21 +3,24 @@ const { LoginError } = require('config/errors/errorTypes');
 
 class UserQueryBuilder extends QueryBuilder {
 
-  async findByCredentials(ctx, { email, password }) {
+  async findByCredentials({ email, password }) {
 
+    // Find the appropriate user from a the sent credentials (including email and password)
     const user = await this.first().where('email', email);
 
+    // If no user is found throw login error
     if (!user) {
 
-      ctx.throw(new LoginError());
+      throw new LoginError();
 
     }
 
     const authenticated = await user.verifyPassword(password);
 
+    // If the password could not be validated throw login error
     if (!authenticated) {
 
-      ctx.throw(new LoginError());
+      throw new LoginError();
 
     }
 

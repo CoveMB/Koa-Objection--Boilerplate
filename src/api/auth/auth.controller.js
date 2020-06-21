@@ -1,4 +1,5 @@
 const { sendResetPasswordEmail } = require('models/User/emails/user.emails');
+const { Token } = require('models');
 
 exports.logIn = async ctx => {
 
@@ -7,7 +8,8 @@ exports.logIn = async ctx => {
     const { user } = ctx.records;
 
     // Generate JWT token for authentication
-    const token = await user.generateAuthToken();
+    const token = await Token.query()
+      .generateAuthToken(user);
 
     // Send back the token
     ctx.body = {
@@ -30,7 +32,7 @@ exports.logOut = async ctx => {
     // The authenticated middleware attache the user that made the request to the context
     const { userRequest, token } = ctx;
 
-    await userRequest.revokeAuthToken(token);
+    await Token.query().revokeAuthToken(userRequest, token);
 
     ctx.body = {
       status: 'success'
@@ -52,7 +54,7 @@ exports.logOutAll = async ctx => {
     // The authenticated middleware attache the user that made the request to the context
     const { userRequest } = ctx;
 
-    await userRequest.revokeAllAuthTokens();
+    await Token.query().revokeAllAuthTokens(userRequest);
 
     ctx.body = {
       status: 'success'
@@ -92,7 +94,8 @@ exports.requestResetPassword = async ctx => {
 
     // Generate JWT token for to send to the email to able password reset
     const temporary = true;
-    const token = await user.generateAuthToken(temporary);
+    const token = await Token.query()
+      .generateAuthToken(user, temporary);
 
     sendResetPasswordEmail(ctx, user.email, token);
 

@@ -11,12 +11,12 @@ const password = bcrypt.hashSync(process.env.INITIAL_PASSWORD, 12);
 exports.seed = function(knex) {
 
   // Deletes ALL existing entries
-  return knex('users').del()
+  return knex('user').del()
     .then(() =>
 
     // You need to set your jwt token before
       // Inserts seed entries
-      knex('users').insert([
+      knex('user').insert([
         {
           email: 'admin@email.com',
           admin: false,
@@ -30,11 +30,11 @@ exports.seed = function(knex) {
       ])
     )
     .then(() =>
-      knex('tokens').del())
+      knex('token').del())
     .then(() =>
 
     // Inserts seed entries
-      knex('tokens').insert([
+      knex('token').insert([
         {
           token  : ADMIN_TOKEN,
           user_id: 1
