@@ -14,9 +14,8 @@ exports.logoutSchema = Joi.object({
 });
 
 exports.resetPasswordSchema = Joi.object({
-  email: Joi
+  password: Joi
     .string()
-    .email()
     .required()
 });
 

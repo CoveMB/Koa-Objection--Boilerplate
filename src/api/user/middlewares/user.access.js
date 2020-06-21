@@ -4,10 +4,11 @@ exports.isSelfOrAdmin = async(ctx, next) => {
 
   try {
 
-    const { userRequest, params } = ctx;
+    const { params } = ctx;
+    const { user } = ctx.authenticated;
     const id  = Number(params.id);
 
-    if (userRequest.id === id || userRequest.admin) {
+    if (user.id === id || user.admin) {
 
       ctx.requestId = id;
 

@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const { Token } = require('models');
 const { NotAuthenticatedError } = require('config/errors/errorTypes');
 const { jwtSecret } = require('config/variables');
+const { validateFoundInstances } = require('models/model.utils');
 
 exports.authenticated = async(ctx, next) => {
 
@@ -27,9 +28,16 @@ exports.authenticated = async(ctx, next) => {
     const foundToken = await Token.query()
       .tokenAndUserIfValid(token);
 
+    if (!foundToken) {
+
+      ctx.throw(new NotAuthenticatedError());
+
+    }
+
     // Attach the found user and current token to the response
-    ctx.userRequest = foundToken.user;
-    ctx.token = token;
+    ctx.authenticated = {
+      user: foundToken.user, token
+    };
 
   } catch (error) {
 

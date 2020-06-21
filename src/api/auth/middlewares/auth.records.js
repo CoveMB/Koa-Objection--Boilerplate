@@ -50,32 +50,3 @@ exports.requestResetPasswordRecords = async(ctx, next) => {
   await next();
 
 };
-
-exports.resetPasswordRecords = async(ctx, next) => {
-
-  try {
-
-    const { validatedRequest } = ctx;
-
-    // Find the user from the email
-    const user = await User.query().findOne(validatedRequest);
-
-    // Validate that a user was found
-    validateFoundInstances([
-      {
-        instance: user, type: 'User', search: 'email'
-      }
-    ]);
-
-    // Attach it to the context
-    ctx.records = { user };
-
-  } catch (error) {
-
-    ctx.throw(error);
-
-  }
-
-  await next();
-
-};

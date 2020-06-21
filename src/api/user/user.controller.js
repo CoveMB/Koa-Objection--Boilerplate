@@ -6,11 +6,11 @@ exports.getProfile = async ctx => {
   try {
 
     // The authenticated middleware attache the user that made the request to the context
-    const { userRequest } = ctx;
+    const { user } = ctx.authenticated;
 
     ctx.body = {
       status: 'success',
-      userRequest
+      user
     };
 
   } catch (error) {

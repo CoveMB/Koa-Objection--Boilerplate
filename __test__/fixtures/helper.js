@@ -3,7 +3,7 @@ let testUser = {
     email   : 'greatemail@exemple.com',
     password: 'P@ssword2000'
   },
-  id: 4,
+  id: 3,
 };
 
 const getUserData = () => ({
@@ -34,7 +34,7 @@ const getFreshToken = async request => {
     .post('/api/v1/login')
     .send({ ...credentials });
 
-  return loginResponse.body.token;
+  return loginResponse.body.token.token;
 
 };
 

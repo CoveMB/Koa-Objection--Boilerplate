@@ -30,9 +30,9 @@ exports.logOut = async ctx => {
   try {
 
     // The authenticated middleware attache the user that made the request to the context
-    const { userRequest, token } = ctx;
+    const { user, token } = ctx.authenticated;
 
-    await Token.query().revokeAuthToken(userRequest, token);
+    await Token.query().revokeAuthToken(user, token);
 
     ctx.body = {
       status: 'success'
@@ -52,9 +52,9 @@ exports.logOutAll = async ctx => {
   try {
 
     // The authenticated middleware attache the user that made the request to the context
-    const { userRequest } = ctx;
+    const { user } = ctx.authenticated;
 
-    await Token.query().revokeAllAuthTokens(userRequest);
+    await Token.query().revokeAllAuthTokens(user);
 
     ctx.body = {
       status: 'success'
@@ -115,10 +115,17 @@ exports.resetPassword = async ctx => {
 
   try {
 
-    const { user } = ctx.records;
+    const { user, token } = ctx.authenticated;
+
+    // TO DO DELETE TOKEN IN DB
+
+    const newToken = await Token.query()
+      .generateAuthToken(user);
 
     ctx.body = {
-      status: 'success'
+      status: 'success',
+      user,
+      token : newToken
     };
 
   } catch (error) {

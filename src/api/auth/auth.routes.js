@@ -37,10 +37,10 @@ module.exports = Router => {
       records.requestResetPasswordRecords,
       controller.requestResetPassword
     )
-    .get(
+    .post(
       '/reset-password',
       validate(requests.resetPasswordSchema, 'body'),
-      records.resetPasswordRecords,
+      authenticated,
       controller.resetPassword
     );
 

@@ -7,7 +7,6 @@ const { getUserData } = require('./helper');
 const setUpDb = async() => {
 
   await knex.migrate.latest();
-  await knex.seed.run();
   await Model.knex(knex);
 
   const { credentials } = getUserData();

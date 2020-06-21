@@ -10,7 +10,7 @@ const {
 beforeAll(setUpDb);
 afterAll(tearDownDb);
 
-test('Should login user, generating fresh unlimited token', async() => {
+test('Should login user, generating fresh token', async() => {
 
   const { credentials, email, password } = getUserData();
 
@@ -24,20 +24,13 @@ test('Should login user, generating fresh unlimited token', async() => {
 
   expect(response.status).toBe(200);
   expect(userDb.password).not.toBe(password);
-  expect(response.body)
-    .toMatchObject({
-      status: 'success',
-      user  : {
-        id   : userDb.id,
-        email: userDb.email,
-      },
+  expect(response.body.user.email).toBe(userDb.email);
 
-      // Singing up a user a first token was generated so we compare to the second one
-      token: userDb.tokens[0].token
-    });
-  expect(userDb.tokens[0].expiration).toBeNull();
+  // Singing up a user a first token was generated so we compare to the second one
+  expect(response.body.token.token).toBe(userDb.tokens[0].token);
+  expect(userDb.tokens[0].expiration).not.toBeNull();
 
-  changeTestUser({ token: response.body.token });
+  changeTestUser({ token: response.body.token.token });
 
 });
 
@@ -56,7 +49,7 @@ test('Should not login user with wrong password', async() => {
 
 });
 
-test('Canot access profile if  not authenticated', async() => {
+test('Canot access profile if not authenticated', async() => {
 
   const response = await request.get('/api/v1/users/1');
 
@@ -158,7 +151,7 @@ test('Should request a password reset', async() => {
   const { email } = getUserData();
 
   const response = await request
-    .post('/api/v1/request-reset-password')
+    .post('/api/v1/request-password-reset')
     .send({
       email
     });

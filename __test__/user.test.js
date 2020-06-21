@@ -32,15 +32,8 @@ test('Should sign up new user, generating fresh token', async() => {
   expect(response.status).toBe(201);
   expect(newUserDB).not.toBeNull();
   expect(nbUsersAfter).toBe(nbUsersBefore + 1);
-  expect(response.body)
-    .toMatchObject({
-      status: 'success',
-      user  : {
-        id   : newUserDB.id,
-        email: newUserDB.email,
-      },
-      token: newUserDB.tokens[0].token
-    });
+  expect(response.body.user.email).toBe(newUserDB.email);
+  expect(response.body.token.token).toBe(newUserDB.tokens[0].token);
 
 });
 
@@ -102,7 +95,7 @@ test('Can access users if authenticated admin', async() => {
 
   const response = await request
     .get('/api/v1/users')
-    .set('Authorization', `Bearer ${createAdminResponse.body.token}`);
+    .set('Authorization', `Bearer ${createAdminResponse.body.token.token}`);
 
   expect(response.status).toBe(200);
 
