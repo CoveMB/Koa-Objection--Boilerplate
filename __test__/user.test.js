@@ -2,66 +2,70 @@ const server = require('config/server');
 const request = require('supertest')(server.callback());
 const { User } = require('models');
 const { setUpDb, tearDownDb } = require('./fixtures/setup');
-const { countInstances } = require('./fixtures/database');
 const { ValidationError } = require('config/errors/errorTypes');
-const {
-  getFreshToken, getUserData, changeTestUser
-} = require('./fixtures/helper');
+const { getFreshToken, getUserData } = require('./fixtures/helper');
 
 beforeAll(setUpDb);
 afterAll(tearDownDb);
 
 test('Should sign up new user, generating fresh token', async() => {
 
-  const nbUsersBefore = await countInstances(User);
-
   const newUser = {
     email: 'nezuser@email.com', password: 'P@ssword2000'
   };
 
+  // Create user
   const response = await request
     .post('/api/v1/users')
     .send(newUser);
 
-  const nbUsersAfter = await countInstances(User);
-
+  // Query the new user
   const newUserDB = await User.query()
     .findById(response.body.user.id)
     .withGraphFetched('tokens');
 
   expect(response.status).toBe(201);
-  expect(newUserDB).not.toBeNull();
-  expect(nbUsersAfter).toBe(nbUsersBefore + 1);
+
+  // New user should exist in db
+  expect(newUserDB).not.toBeUndefined();
+
+  // The right user should be returned
   expect(response.body.user.email).toBe(newUserDB.email);
+
+  // The right token should be returned
   expect(response.body.token.token).toBe(newUserDB.tokens[0].token);
 
 });
 
 test('Should update user', async() => {
 
-  const { credentials, id } = getUserData();
-  const { email } = credentials;
+  const newUser = {
+    email: 'nezuser2@email.com', password: 'P@ssword2000'
+  };
 
-  const token = await getFreshToken(request);
+  // Create user
+  const responseNewUser = await request
+    .post('/api/v1/users')
+    .send(newUser);
 
+  const { user, token } = responseNewUser.body;
+
+  // Request a user update with the fresh token
   const response = await request
-    .patch(`/api/v1/users/${id}`)
+    .patch(`/api/v1/users/${user.id}`)
     .send({
-      email: `changed${email}`
+      email: `changed${user.email}`
     })
-    .set('Authorization', `Bearer ${token}`);
+    .set('Authorization', `Bearer ${token.token}`);
 
+  // Query the updated user
   const updatedUser = await User.query()
-    .findOne({ id });
+    .findOne({ id: user.id });
 
   expect(response.status).toBe(200);
-  expect(updatedUser.email).toBe(`changed${email}`);
 
-  changeTestUser({
-    credentials: {
-      ...credentials, email: `changed${email}`
-    }
-  });
+  // The email should be different
+  expect(updatedUser.email).toBe(`changed${user.email}`);
 
 });
 
@@ -69,8 +73,10 @@ test('Should not update user if invalid field is sent', async() => {
 
   const { id } = getUserData();
 
+  // Get fresh token
   const token = await getFreshToken(request);
 
+  // Send request with invalid field
   const response = await request
     .patch(`/api/v1/users/${id}`)
     .send({
@@ -78,6 +84,7 @@ test('Should not update user if invalid field is sent', async() => {
     })
     .set('Authorization', `Bearer ${token}`);
 
+  // A validation error is triggered
   expect(response.status).toBe(422);
   expect(response.body.error).toBe(new ValidationError().name);
 
@@ -89,10 +96,12 @@ test('Can access users if authenticated admin', async() => {
     email: 'testadmin@email.com', password: 'P@ssword2000', admin: true
   };
 
+  // Create new admin
   const createAdminResponse = await request
     .post('/api/v1/users')
     .send(newAdmin);
 
+  // Access users
   const response = await request
     .get('/api/v1/users')
     .set('Authorization', `Bearer ${createAdminResponse.body.token.token}`);
@@ -103,18 +112,29 @@ test('Can access users if authenticated admin', async() => {
 
 test('Should delete user', async() => {
 
-  const { id } = getUserData();
+  const newUser = {
+    email: 'nezuser2@email.com', password: 'P@ssword2000'
+  };
 
-  const token = await getFreshToken(request);
+  // Create user
+  const responseNewUser = await request
+    .post('/api/v1/users')
+    .send(newUser);
 
+  const { user, token } = responseNewUser.body;
+
+  // Request user delete
   const response = await request
-    .delete(`/api/v1/users/${id}`)
-    .set('Authorization', `Bearer ${token}`);
+    .delete(`/api/v1/users/${user.id}`)
+    .set('Authorization', `Bearer ${token.token}`);
 
+  // Query user
   const updatedUser = await User.query()
-    .findOne({ id });
+    .findOne({ id: user.id });
 
   expect(response.status).toBe(200);
+
+  // User should not been found in database
   expect(updatedUser).toBeUndefined();
 
 });
