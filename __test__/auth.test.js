@@ -1,16 +1,14 @@
 const server = require('config/server');
 const request = require('supertest')(server.callback());
-const { User } = require('models');
+const { User, Token } = require('models');
 const { NotAuthenticatedError } = require('config/errors/errorTypes');
 const { setUpDb, tearDownDb } = require('./fixtures/setup');
-const {
-  getFreshToken, getUserData, changeTestUser
-} = require('./fixtures/helper');
+const { getFreshToken, getUserData } = require('./fixtures/helper');
 
 beforeAll(setUpDb);
 afterAll(tearDownDb);
 
-test('Should login user, generating fresh token', async() => {
+test('Should login user with correct authentication dont return plain password', async() => {
 
   const { credentials, email, password } = getUserData();
 
@@ -19,18 +17,31 @@ test('Should login user, generating fresh token', async() => {
     .send(credentials);
 
   const userDb = await User.query()
-    .findOne({ email })
-    .withGraphFetched('tokens');
+    .findOne({ email });
 
   expect(response.status).toBe(200);
   expect(userDb.password).not.toBe(password);
   expect(response.body.user.email).toBe(userDb.email);
 
-  // Singing up a user a first token was generated so we compare to the second one
-  expect(response.body.token.token).toBe(userDb.tokens[0].token);
-  expect(userDb.tokens[0].expiration).not.toBeNull();
+});
 
-  changeTestUser({ token: response.body.token.token });
+test('Should generate fresh valid 6 month token on logging', async() => {
+
+  const { credentials } = getUserData();
+
+  const response = await request
+    .post('/api/v1/login')
+    .send(credentials);
+
+  const token = await Token.query()
+    .findOne({ token: response.body.token.token })
+    .withGraphFetched('user');
+
+  const now = new Date();
+  const tokenExpiration = new Date(response.body.token.expiration);
+
+  expect(tokenExpiration.getMonth()).toBe(now.getMonth() + 6);
+  expect(response.body.token.token).toBe(token.token);
 
 });
 
@@ -70,7 +81,7 @@ test('Can access profile if authenticated', async() => {
 
 });
 
-test('Should logout user', async() => {
+test('Should logout user and revoke token', async() => {
 
   const token = await getFreshToken(request);
 
@@ -78,11 +89,15 @@ test('Should logout user', async() => {
     .post('/api/v1/logout')
     .set('Authorization', `Bearer ${token}`);
 
+  const tokenDb = await Token.query()
+    .findOne({ token });
+
   expect(response.status).toBe(200);
+  expect(tokenDb).toBeUndefined();
 
 });
 
-test('After logout the token should be revoked', async() => {
+test('Should not be able to logging with revoked token', async() => {
 
   const token = await getFreshToken(request);
 
@@ -146,7 +161,7 @@ test('Should not validate revoked tokens', async() => {
 
 });
 
-test('Should request a password reset', async() => {
+test('Should request a password reset generating a temporary 1h valid token', async() => {
 
   const { email } = getUserData();
 
@@ -156,16 +171,94 @@ test('Should request a password reset', async() => {
       email
     });
 
-  // find other way to query last token
   const userDb = await User.query()
     .findOne({ email })
-    .withGraphFetched('tokens');
+    .withGraphFetched('tokens(orderByCreation)');
 
-  const dateCreated = new Date(userDb.tokens[0].created_at);
-  const dateExpiration = new Date(userDb.tokens[0].expiration);
+  const now = new Date();
+  const tokenExpiration = new Date(userDb.tokens[0].expiration);
 
   expect(response.status).toBe(200);
-  expect(userDb.tokens[0].expiration).not.toBeNull();
-  expect(dateExpiration.getHours()).toBe(dateCreated.getHours() + 1);
+  expect(response.body.token).toBeUndefined();
+  expect(tokenExpiration.getHours()).toBeLessThanOrEqual(now.getHours() + 1);
+
+});
+
+test('Should reset the password of user and make it unable to log with old password', async() => {
+
+  const { credentials, password, email } = getUserData();
+
+  await request
+    .post('/api/v1/request-password-reset')
+    .send({
+      email
+    });
+
+  const userDb = await User.query()
+    .findOne({ email })
+    .withGraphFetched('tokens(orderByCreation)');
+
+  const response = await request
+    .post('/api/v1/reset-password')
+    .send({
+      password: `${password}2`
+    })
+    .set('Authorization', `Bearer ${userDb.tokens[0].token}`);
+
+  const responseOldPassword = await request
+    .post('/api/v1/login')
+    .send(credentials);
+
+  const responseNewPassword = await request
+    .post('/api/v1/login')
+    .send({
+      email, password: `${password}2`
+    });
+
+  expect(response.status).toBe(200);
+  expect(response.body.user.email).toBe(userDb.email);
+
+  expect(responseNewPassword.status).toBe(200);
+  expect(responseOldPassword.status).toBe(401);
+
+});
+
+test('Should reset the password and generate a fresh token and revoke all other tokens', async() => {
+
+  const { credentials, password, email } = getUserData();
+
+  await request
+    .post('/api/v1/login')
+    .send(credentials);
+
+  await request
+    .post('/api/v1/request-password-reset')
+    .send({
+      email
+    });
+
+  const userDb = await User.query()
+    .findOne({ email })
+    .withGraphFetched('tokens(orderByCreation)');
+
+  const response = await request
+    .post('/api/v1/reset-password')
+    .send({
+      password: `${password}3`
+    })
+    .set('Authorization', `Bearer ${userDb.tokens[0].token}`);
+
+  const userDbAfterReset = await User.query()
+    .findOne({ email })
+    .withGraphFetched('tokens(orderByCreation)');
+
+  const userTokens = await Token.query().where({ user_id: userDb.id });
+
+  const now = new Date();
+  const tokenExpiration = new Date(userDbAfterReset.tokens[0].expiration);
+
+  expect(response.body.token.token).toBe(userDbAfterReset.tokens[0].token);
+  expect(tokenExpiration.getMonth()).toBe(now.getMonth() + 6);
+  expect(userTokens.length).toBe(1);
 
 });

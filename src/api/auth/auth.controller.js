@@ -30,9 +30,9 @@ exports.logOut = async ctx => {
   try {
 
     // The authenticated middleware attache the user that made the request to the context
-    const { user, token } = ctx.authenticated;
+    const { token } = ctx.authenticated;
 
-    await Token.query().revokeAuthToken(user, token);
+    await Token.query().revokeAuthToken(token);
 
     ctx.body = {
       status: 'success'
@@ -115,10 +115,18 @@ exports.resetPassword = async ctx => {
 
   try {
 
-    const { user, token } = ctx.authenticated;
+    const { validatedRequest } = ctx;
+    const { user } = ctx.authenticated;
 
-    // TO DO DELETE TOKEN IN DB
+    // Update the user
+    await user.$query()
+      .patchAndFetch(validatedRequest);
 
+    // Revoke other tokens
+    await Token.query()
+      .revokeAllAuthTokens(user);
+
+    // Send fresh one
     const newToken = await Token.query()
       .generateAuthToken(user);
 

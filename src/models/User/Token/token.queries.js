@@ -7,7 +7,7 @@ const { jwtSecret } = require('config/variables');
 class TokenQueryBuilder extends QueryBuilder {
 
   // Validate token, if it exist and if it is not expired than return it with the attached user
-  async tokenAndUserIfValid(token) {
+  async tokenWithUserGraphIfValid(token) {
 
     const foundToken = await this
       .findOne('token', token)
@@ -21,9 +21,6 @@ class TokenQueryBuilder extends QueryBuilder {
     }
 
     if (foundToken.expiration && foundToken.expiration < new Date()) {
-
-      await this
-        .deleteById(foundToken.id);
 
       // If the token is expired throw a NotAuthenticatedError user
       throw new TokenExpiredError();
@@ -73,7 +70,7 @@ class TokenQueryBuilder extends QueryBuilder {
   }
 
   // Revoke an auth token from the user
-  async revokeAuthToken(user, token) {
+  async revokeAuthToken(token) {
 
     return this
       .findOne({ token })

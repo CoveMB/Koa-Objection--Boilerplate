@@ -56,6 +56,19 @@ class Token extends BaseModel {
 
   }
 
+  // Modifiers are reusable query snippets that can be used in various places.
+  static get modifiers() {
+
+    return {
+      orderByCreation(builder) {
+
+        builder.orderBy('created_at');
+
+      }
+    };
+
+  }
+
 }
 
 module.exports = { Token };

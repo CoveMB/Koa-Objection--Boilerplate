@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 const { Token } = require('models');
 const { NotAuthenticatedError } = require('config/errors/errorTypes');
 const { jwtSecret } = require('config/variables');
-const { validateFoundInstances } = require('models/model.utils');
 
 exports.authenticated = async(ctx, next) => {
 
@@ -26,7 +25,7 @@ exports.authenticated = async(ctx, next) => {
 
     // Find the appropriate user attached to the token if the token is valid
     const foundToken = await Token.query()
-      .tokenAndUserIfValid(token);
+      .tokenWithUserGraphIfValid(token);
 
     if (!foundToken) {
 
