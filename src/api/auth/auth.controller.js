@@ -1,4 +1,4 @@
-const { sendResetPasswordEmail } = require('models/User/emails/user.emails');
+const { sendResetPasswordEmail } = require('models/User/user.emails');
 const { Token } = require('models');
 
 exports.logIn = async ctx => {
