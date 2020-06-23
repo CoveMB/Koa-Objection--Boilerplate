@@ -1,6 +1,5 @@
 const { QueryBuilder } = require('objection');
-const { NotAuthenticatedError } = require('config/errors/errorTypes');
-const { TokenExpiredError } = require('jsonwebtoken');
+const { NotAuthenticatedError, ExpiredTokenError } = require('config/errors/errorTypes');
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('config/variables');
 
@@ -23,7 +22,7 @@ class TokenQueryBuilder extends QueryBuilder {
     if (foundToken.expiration && foundToken.expiration < new Date()) {
 
       // If the token is expired throw a NotAuthenticatedError user
-      throw new TokenExpiredError();
+      throw new ExpiredTokenError();
 
     }
 

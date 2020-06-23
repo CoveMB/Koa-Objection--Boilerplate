@@ -3,14 +3,11 @@ FROM node:13-slim
 # Set environnement to development
 ENV NODE_ENV=development
 
-# Add some dependencies 9for (bcrypt)
+# Add some dependencies for (bcrypt)
 RUN apt-get update && apt-get install -y --no-install-recommends \
   build-essential \
   python && \
   rm -rf /var/lib/apt/lists/*
-
-# install knex migration manager
-RUN npm install knex -g
 
 # Change for app directory
 WORKDIR /node/app
@@ -28,6 +25,7 @@ USER node
 RUN yarn install && yarn cache clean
 
 # Add to PATH
+ENV PATH="$PATH:./node_modules/.bin"
 RUN npm config set scripts-prepend-node-path true
 
 # Copy existing local files into container, and set permission to node user
