@@ -28,8 +28,9 @@ class Token extends BaseModel {
         device: {
           type: 'string', minLength: 1, maxLength: 255
         },
-        expiration: { type: 'date' },
-        token     : {
+
+        // expiration: { type: 'format' },
+        token: {
           type: 'string', minLength: 1, maxLength: 255
         },
       }

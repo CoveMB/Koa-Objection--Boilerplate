@@ -25,7 +25,6 @@ exports.up = function(knex) {
         .integer('user_id')
         .unsigned()
         .references('user.id')
-        .inTable('user')
         .onDelete('CASCADE')
         .index();
       table.dateTime('expiration').nullable();
