@@ -9,10 +9,9 @@ module.exports = Router => {
   });
 
   router
-    .all(
+    .post(
       '/',
-
-      // authenticated,
+      authenticated,
       controller.graphql);
 
   return router;

@@ -28,6 +28,20 @@ class QueryError extends Error {
 
 }
 
+class ImplementationMissingError extends Error {
+
+  // This error is generated if a query fails
+  constructor(message) {
+
+    super(`You are missing an implementation: ${message}`);
+    this.name = 'ImplementationMissingError';
+    this.status = 550;
+    this.expose = false;
+
+  }
+
+}
+
 class EmailNotSentError extends Error {
 
   // This error is generated if an email could not been sent
@@ -35,7 +49,7 @@ class EmailNotSentError extends Error {
 
     super(`Email could not been sent: ${message}`);
     this.name = 'EmailNotSentError';
-    this.status = 500;
+    this.status = 503;
     this.expose = false;
 
   }
@@ -152,5 +166,6 @@ module.exports = {
   EmailNotSentError,
   ConfigError,
   QueryError,
-  ThirdPartyError
+  ThirdPartyError,
+  ImplementationMissingError
 };

@@ -16,6 +16,17 @@ class Token extends BaseModel {
 
   }
 
+  static async accessControlGraphQLQuery({ asFindQuery, context, items }) {
+
+    const { user } = context;
+
+    return asFindQuery()
+      .clearContext()
+      .where('token.user_id', user.id)
+      .withGraphFetched('user');
+
+  }
+
   static get jsonSchema() {
 
     return {
@@ -29,7 +40,7 @@ class Token extends BaseModel {
           type: 'string', minLength: 1, maxLength: 255
         },
 
-        // expiration: { type: 'format' },
+        // expiration: { type: 'string' },
         token: {
           type: 'string', minLength: 1, maxLength: 255
         },

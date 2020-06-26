@@ -28,6 +28,16 @@ const validateFoundInstances = instancesToCheck => {
 
 };
 
+// Get hooks argument from the query and return is the query comes from a graphql query
+const isFromGraphqlQuery = hooksArguments => {
+
+  const { context } = hooksArguments;
+  const { isGraphqlQuery } = context;
+
+  return isGraphqlQuery;
+
+};
+
 module.exports = {
-  validateInput, validateFoundInstances
+  validateInput, validateFoundInstances, isFromGraphqlQuery
 };

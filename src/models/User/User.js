@@ -27,6 +27,16 @@ class User extends Password(Unique(BaseModel)) {
 
   }
 
+  static async accessControlGraphQLQuery({ asFindQuery, context, items }) {
+
+    const { user } = context;
+
+    return asFindQuery()
+      .clearContext()
+      .where('user.id', user.id);
+
+  }
+
   static get jsonSchema() {
 
     return {
