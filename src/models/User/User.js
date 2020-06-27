@@ -27,16 +27,6 @@ class User extends Password(Unique(BaseModel)) {
 
   }
 
-  static async accessControlGraphQLQuery({ asFindQuery, context, items }) {
-
-    const { user } = context;
-
-    return asFindQuery()
-      .clearContext()
-      .where('user.id', user.id);
-
-  }
-
   static get jsonSchema() {
 
     return {
@@ -142,7 +132,13 @@ class User extends Password(Unique(BaseModel)) {
   // Modifiers are reusable query snippets that can be used in various places.
   static get modifiers() {
 
-    return {};
+    return {
+      graphQLAccessControl(builder, user) {
+
+        builder.where('id', user.id);
+
+      }
+    };
 
   }
 

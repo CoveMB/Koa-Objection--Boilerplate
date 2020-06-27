@@ -1,6 +1,7 @@
 const graphqlHTTP = require('koa-graphql');
 const graphQlSchema  = require('config/graphql');
 const { isDevelopment } = require('config/variables');
+const { ImplementationMissingError } = require('config/errors/errorTypes');
 
 // The user the the parameter comes from the authenticated middleware
 exports.graphql = async ctx => graphqlHTTP({
@@ -18,8 +19,19 @@ exports.graphql = async ctx => graphqlHTTP({
     async onQuery(query) {
 
       query.context({
-        user          : ctx.authenticated.user,
-        isGraphqlQuery: true
+        runBefore(result, builder) {
+
+          try {
+
+            builder.modify('graphQLAccessControl', ctx.authenticated.user);
+
+          } catch (error) {
+
+            throw new ImplementationMissingError(`graphQLAccessControl modifier for one of the model queried by the graphQL query | ${error.stack}`);
+
+          }
+
+        },
       });
 
     }

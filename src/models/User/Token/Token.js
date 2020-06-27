@@ -16,17 +16,6 @@ class Token extends BaseModel {
 
   }
 
-  static async accessControlGraphQLQuery({ asFindQuery, context, items }) {
-
-    const { user } = context;
-
-    return asFindQuery()
-      .clearContext()
-      .where('token.user_id', user.id)
-      .withGraphFetched('user');
-
-  }
-
   static get jsonSchema() {
 
     return {
@@ -75,6 +64,11 @@ class Token extends BaseModel {
       orderByCreation(builder) {
 
         builder.orderBy('created_at');
+
+      },
+      graphQLAccessControl(builder, user) {
+
+        builder.where('user_id', user.id);
 
       }
     };

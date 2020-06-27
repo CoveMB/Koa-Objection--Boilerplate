@@ -1,7 +1,4 @@
-/* eslint-disable consistent-return */
 const { Model, QueryBuilder } = require('objection');
-const { ImplementationMissingError } = require('config/errors/errorTypes');
-const { isFromGraphqlQuery } = require('./model.utils');
 
 class BaseModel extends Model {
 
@@ -27,56 +24,6 @@ class BaseModel extends Model {
       }
 
     };
-
-  }
-
-  static async validateGQLControlImplementation(hooksArguments) {
-
-    if (isFromGraphqlQuery(hooksArguments)) {
-
-      try {
-
-        return this.accessControlGraphQLQuery(hooksArguments);
-
-      } catch (error) {
-
-        throw new ImplementationMissingError(`accessControlGraphQLQuery function for the ${this.name} model, ${error}`);
-
-      }
-
-    }
-
-  }
-
-  static async afterInsert(hooksArguments) {
-
-    await super.beforeInsert(hooksArguments);
-
-    return this.validateGQLControlImplementation(hooksArguments);
-
-  }
-
-  static async afterUpdate(hooksArguments) {
-
-    await super.beforeInsert(hooksArguments);
-
-    return this.validateGQLControlImplementation(hooksArguments);
-
-  }
-
-  static async afterDelete(hooksArguments) {
-
-    await super.beforeInsert(hooksArguments);
-
-    return this.validateGQLControlImplementation(hooksArguments);
-
-  }
-
-  static async afterFind(hooksArguments) {
-
-    await super.beforeInsert(hooksArguments);
-
-    return this.validateGQLControlImplementation(hooksArguments);
 
   }
 
