@@ -1,5 +1,5 @@
 const controller = require('./user.controller');
-const { authenticated, validate } = require('globalMiddlewares');
+const { authenticated, validateRequest } = require('globalMiddlewares');
 const requests = require('./middlewares/user.requests');
 const access = require('./middlewares/user.access');
 const records = require('./middlewares/user.records');
@@ -32,12 +32,12 @@ module.exports = Router => {
     )
     .post(
       '/',
-      validate(requests.createUpdateSchema, 'body'),
+      validateRequest(requests.createUpdateSchema, 'body'),
       controller.createOne
     )
     .patch(
       '/:id',
-      validate(requests.createUpdateSchema, 'body'),
+      validateRequest(requests.createUpdateSchema, 'body'),
       authenticated,
       access.isSelfOrAdmin,
       records.getByIdRecords,

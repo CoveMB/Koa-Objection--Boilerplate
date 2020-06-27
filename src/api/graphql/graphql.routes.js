@@ -1,5 +1,6 @@
 // const controller = require('./graphql.controller');
-const { authenticated } = require('globalMiddlewares');
+const { authenticated, validateRequest } = require('globalMiddlewares');
+const requests = require('./middlewares/graphql.requests');
 const controller = require('./graphql.controller');
 
 module.exports = Router => {
@@ -11,6 +12,7 @@ module.exports = Router => {
   router
     .post(
       '/',
+      validateRequest(requests.query, 'body'),
       authenticated,
       controller.graphql);
 

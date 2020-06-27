@@ -1,28 +1,27 @@
-// const sgMail = require('@sendgrid/mail');
-// const { sendGridSecret } = require('config/variables');
+const sgMail = require('@sendgrid/mail');
+const { sendGridSecret } = require('config/variables');
 
-// sgMail.setApiKey(sendGridSecret);
+sgMail.setApiKey(sendGridSecret);
 
 module.exports = {
   setApiKey() {
 
   },
+  send() {
 
-  // sendResetPasswordEmail() {
+    // const msg = {
+    //   to           : 'recipient@example.org',
+    //   from         : 'sender@example.org',
+    //   subject      : 'Hello world',
+    //   html         : 'Hello HTML world!',
+    //   mail_settings: {
+    //     sandbox_mode: {
+    //       enable: true
+    //     }
+    //   },
+    // };
 
-  //   const msg = {
-  //     to           : 'recipient@example.org',
-  //     from         : 'sender@example.org',
-  //     subject      : 'Hello world',
-  //     html         : 'Hello HTML world!',
-  //     mail_settings: {
-  //       sandbox_mode: {
-  //         enable: true
-  //       }
-  //     },
-  //   };
+    // sgMail.send(msg);
 
-  //   sgMail.send(msg);
-
-  // }
+  }
 };

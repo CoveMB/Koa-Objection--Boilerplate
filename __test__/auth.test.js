@@ -114,6 +114,9 @@ test('Should logout user and revoke token', async() => {
   // Request logout
   const response = await request
     .post('/api/v1/logout')
+    .send({
+      token
+    })
     .set('Authorization', `Bearer ${token}`);
 
   //  Query the token
@@ -127,7 +130,7 @@ test('Should logout user and revoke token', async() => {
 
 });
 
-test('Should not be able to logging with revoked token', async() => {
+test('Should not be able to logout with revoked token', async() => {
 
   // Get fresh token
   const token = await getFreshToken(request);
@@ -135,11 +138,17 @@ test('Should not be able to logging with revoked token', async() => {
   // Request logout
   await request
     .post('/api/v1/logout')
+    .send({
+      token
+    })
     .set('Authorization', `Bearer ${token}`);
 
   // Request logout
   const secondLogout = await request
     .post('/api/v1/logout')
+    .send({
+      token
+    })
     .set('Authorization', `Bearer ${token}`);
 
   // The token was already revoked
@@ -193,6 +202,9 @@ test('Should not validate revoked tokens', async() => {
   // Request logout (revoke token)
   await request
     .post('/api/v1/logout')
+    .send({
+      token
+    })
     .set('Authorization', `Bearer ${token}`);
 
   // Request to check the token validity

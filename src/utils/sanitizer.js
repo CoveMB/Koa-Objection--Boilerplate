@@ -14,6 +14,12 @@ const sanitizeExposedBody = body => {
 
   }
 
+  if (sanitizedBody.token) {
+
+    sanitizedBody.token = '*********';
+
+  }
+
   return JSON.stringify({ ...sanitizedBody });
 
 };

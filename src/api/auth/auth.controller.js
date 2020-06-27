@@ -31,7 +31,7 @@ exports.logOut = async ctx => {
   try {
 
     // The authenticated middleware attache the user that made the request to the context
-    const { token } = ctx.authenticated;
+    const { token } = ctx.validatedRequest;
 
     await Token.query().revokeAuthToken(token);
 

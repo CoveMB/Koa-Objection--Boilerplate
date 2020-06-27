@@ -1,5 +1,5 @@
 const requests = require('./middlewares/auth.requests');
-const { authenticated, validate } = require('globalMiddlewares');
+const { authenticated, validateRequest } = require('globalMiddlewares');
 const records = require('./middlewares/auth.records');
 const controller = require('./auth.controller');
 
@@ -10,19 +10,19 @@ module.exports = Router => {
   router
     .post(
       '/login',
-      validate(requests.loginSchema, 'body'),
+      validateRequest(requests.loginSchema, 'body'),
       records.loginRecords,
       controller.logIn
     )
     .post(
       '/logout',
-      validate(requests.logoutSchema, 'body'),
+      validateRequest(requests.logoutSchema, 'body'),
       authenticated,
       controller.logOut
     )
     .post(
       '/logoutAll',
-      validate(requests.logoutSchema, 'body'),
+      validateRequest(requests.logoutAllSchema, 'body'),
       authenticated,
       controller.logOutAll
     )
@@ -33,13 +33,13 @@ module.exports = Router => {
     )
     .post(
       '/request-password-reset',
-      validate(requests.requestResetPasswordSchema, 'body'),
+      validateRequest(requests.requestResetPasswordSchema, 'body'),
       records.requestResetPasswordRecords,
       controller.requestResetPassword
     )
     .post(
       '/reset-password',
-      validate(requests.resetPasswordSchema, 'body'),
+      validateRequest(requests.resetPasswordSchema, 'body'),
       authenticated,
       controller.resetPassword
     );

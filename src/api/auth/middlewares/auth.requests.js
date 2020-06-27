@@ -11,6 +11,12 @@ exports.loginSchema = Joi.object({
 });
 
 exports.logoutSchema = Joi.object({
+  token: Joi
+    .string()
+    .required()
+});
+
+exports.logoutAllSchema = Joi.object({
 });
 
 exports.resetPasswordSchema = Joi.object({
