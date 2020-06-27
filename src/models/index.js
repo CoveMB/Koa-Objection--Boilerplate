@@ -3,5 +3,5 @@ const Token = require('./User/Token/Token');
 
 module.exports = {
   ...User,
-  ...Token
+  ...Token,
 };

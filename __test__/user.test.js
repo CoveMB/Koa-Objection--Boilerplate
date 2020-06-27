@@ -90,26 +90,6 @@ test('Should not update user if invalid field is sent', async() => {
 
 });
 
-test('Can access users if authenticated admin', async() => {
-
-  const newAdmin = {
-    email: 'testadmin@email.com', password: 'P@ssword2000', admin: true
-  };
-
-  // Create new admin
-  const createAdminResponse = await request
-    .post('/api/v1/users')
-    .send(newAdmin);
-
-  // Access users
-  const response = await request
-    .get('/api/v1/users')
-    .set('Authorization', `Bearer ${createAdminResponse.body.token.token}`);
-
-  expect(response.status).toBe(200);
-
-});
-
 test('Should delete user', async() => {
 
   const newUser = {

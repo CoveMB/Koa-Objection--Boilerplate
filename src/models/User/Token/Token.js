@@ -28,8 +28,9 @@ class Token extends BaseModel {
         device: {
           type: 'string', minLength: 1, maxLength: 255
         },
-        expiration: { type: 'date' },
-        token     : {
+
+        // expiration: { type: 'string' },
+        token: {
           type: 'string', minLength: 1, maxLength: 255
         },
       }
@@ -63,6 +64,11 @@ class Token extends BaseModel {
       orderByCreation(builder) {
 
         builder.orderBy('created_at');
+
+      },
+      graphQLAccessControl(builder, user) {
+
+        builder.where('user_id', user.id);
 
       }
     };

@@ -1,9 +1,12 @@
 const Koa = require('koa');
 const bodyParser = require('koa-bodyparser')();
 const compress = require('koa-compress')();
+const { userAgent } = require('koa-useragent');
+const cors = require('@koa/cors');
 const { errorEvent, errorHandler } = require('config/errors/errorEvent');
 const registerRouters = require('api');
-const { log, cors, error } = require('globalMiddlewares');
+const { log, error } = require('globalMiddlewares');
+const { corsOptions } = require('config/cors');
 
 /**
  * Create app
@@ -13,11 +16,13 @@ const app = new Koa();
 /**
  * Register global middlewares
 */
-app.use(cors)       // Configure cors
-  .use(bodyParser)  // Parse the body request
-  .use(log)         // Log every logRequests
-  .use(error)       // Handle trowed errors
-  .use(compress);   // Allow compress
+
+app.use(cors(corsOptions))    // Configure cors
+  .use(userAgent)             // Attach user agent to the context
+  .use(bodyParser)            // Parse the body request
+  .use(log)                   // Log every logRequests
+  .use(error)                 // Handle trowed errors
+  .use(compress);             // Allow compress
 
 /**
  * Register events

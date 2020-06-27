@@ -33,7 +33,7 @@ class TokenQueryBuilder extends QueryBuilder {
   // Generate an auth token for the user
   // By default the token will be temporary
   // If temporary it will have an expiration date
-  async generateAuthToken(user, temporary) {
+  async generateAuthToken(user, { _agent }, temporary) {
 
     const token = await jwt.sign({ id: user.id }, jwtSecret);
 
@@ -54,9 +54,13 @@ class TokenQueryBuilder extends QueryBuilder {
 
     }
 
+    // Insert the token and relate it to the user
     await this.insertGraph(
       {
-        token, expiration: date, user
+        token,
+        expiration: date,
+        device    : `${_agent.os || 'unknown'} - ${_agent.browser || 'unknown'}`,
+        user,
       }, {
         relate: true
       }

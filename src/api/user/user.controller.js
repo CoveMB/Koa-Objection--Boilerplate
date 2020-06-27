@@ -65,14 +65,14 @@ exports.createOne = async ctx => {
 
   try {
 
-    const { validatedRequest } = ctx;
+    const { validatedRequest, userAgent } = ctx;
 
     // Create new user
     const user = await User.query().insert(validatedRequest);
 
     // Generate JWT token for the new user
     const token = await Token.query()
-      .generateAuthToken(user);
+      .generateAuthToken(user, userAgent);
 
     // And send it back
     ctx.status = 201;

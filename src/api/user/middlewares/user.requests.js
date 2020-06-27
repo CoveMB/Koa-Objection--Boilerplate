@@ -6,7 +6,5 @@ exports.createUpdateSchema = Joi.object({
     .string()
     .email(),
   password: Joi
-    .string(),
-  admin: Joi
-    .boolean()
+    .string()
 });

@@ -21,7 +21,6 @@ const registerRouters = app => {
       router.use(api.routes());
 
     });
-
   app.use(router.routes()).use(router.allowedMethods());
 
   return app;

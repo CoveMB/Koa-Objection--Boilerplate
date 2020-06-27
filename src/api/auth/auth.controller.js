@@ -5,11 +5,12 @@ exports.logIn = async ctx => {
 
   try {
 
-    const { user } = ctx.records;
+    const { userAgent, records } = ctx;
+    const { user } = records;
 
     // Generate JWT token for authentication
     const token = await Token.query()
-      .generateAuthToken(user);
+      .generateAuthToken(user, userAgent);
 
     // Send back the token
     ctx.body = {
@@ -90,12 +91,13 @@ exports.requestResetPassword = async ctx => {
 
   try {
 
-    const { user } = ctx.records;
+    const { userAgent, records } = ctx;
+    const { user } = records;
 
     // Generate JWT token for to send to the email to able password reset
     const temporary = true;
     const token = await Token.query()
-      .generateAuthToken(user, temporary);
+      .generateAuthToken(user, userAgent, temporary);
 
     sendResetPasswordEmail(ctx, user.email, token);
 
@@ -115,8 +117,8 @@ exports.resetPassword = async ctx => {
 
   try {
 
-    const { validatedRequest } = ctx;
-    const { user } = ctx.authenticated;
+    const { validatedRequest, userAgent, authenticated } = ctx;
+    const { user } = authenticated;
 
     // Update the user
     await user.$query()
@@ -128,7 +130,7 @@ exports.resetPassword = async ctx => {
 
     // Send fresh one
     const newToken = await Token.query()
-      .generateAuthToken(user);
+      .generateAuthToken(user, userAgent);
 
     ctx.body = {
       status: 'success',
