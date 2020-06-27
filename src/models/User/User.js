@@ -133,8 +133,11 @@ exports.User = class User extends Password(Unique(BaseModel)) {
   static get modifiers() {
 
     return {
+
+      // This modifier control the data that can be accessed depending of the authenticated user
       graphQLAccessControl(builder, user) {
 
+        // Only the authenticated user should be accessible
         builder.where('id', user.id);
 
       }

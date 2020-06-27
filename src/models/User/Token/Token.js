@@ -66,8 +66,11 @@ exports.Token = class Token extends BaseModel {
         builder.orderBy('created_at');
 
       },
+
+      // This modifier control the data that can be accessed depending of the authenticated user
       graphQLAccessControl(builder, user) {
 
+        // Only the tokens from the authenticated user should be accessible
         builder.where('user_id', user.id);
 
       }
