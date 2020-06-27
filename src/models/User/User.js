@@ -12,7 +12,7 @@ const Unique = require('objection-unique')({
   identifiers: [ 'id' ]
 });
 
-class User extends Password(Unique(BaseModel)) {
+exports.User = class User extends Password(Unique(BaseModel)) {
 
   static get tableName() {
 
@@ -142,6 +142,4 @@ class User extends Password(Unique(BaseModel)) {
 
   }
 
-}
-
-module.exports = { User };
+};

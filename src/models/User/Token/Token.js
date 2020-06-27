@@ -1,7 +1,7 @@
 const BaseModel = require('models/BaseModel');
 const TokenQueryBuilder = require('./token.queries');
 
-class Token extends BaseModel {
+exports.Token = class Token extends BaseModel {
 
   static get tableName() {
 
@@ -75,6 +75,4 @@ class Token extends BaseModel {
 
   }
 
-}
-
-module.exports = { Token };
+};
