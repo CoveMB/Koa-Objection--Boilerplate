@@ -29,7 +29,7 @@ exports.Token = class Token extends BaseModel {
           type: 'string', minLength: 1, maxLength: 255
         },
 
-        // expiration: { type: 'string' },
+        // expiration: { type: 'format' },
         token: {
           type: 'string', minLength: 1, maxLength: 255
         },
