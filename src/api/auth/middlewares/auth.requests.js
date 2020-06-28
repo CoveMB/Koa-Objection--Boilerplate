@@ -19,7 +19,7 @@ exports.logoutSchema = Joi.object({
 exports.logoutAllSchema = Joi.object({
 });
 
-exports.resetPasswordSchema = Joi.object({
+exports.setPasswordSchema = Joi.object({
   password: Joi
     .string()
     .required()

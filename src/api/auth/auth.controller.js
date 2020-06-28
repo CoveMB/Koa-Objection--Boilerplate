@@ -1,4 +1,4 @@
-const { sendResetPasswordEmail } = require('models/User/user.emails');
+const { sendResetPasswordEmail } = require('models/User/Token/token.emails');
 const { Token } = require('models');
 
 exports.logIn = async ctx => {
@@ -99,7 +99,7 @@ exports.requestResetPassword = async ctx => {
     const token = await Token.query()
       .generateAuthToken(user, userAgent, temporary);
 
-    sendResetPasswordEmail(ctx, user.email, token);
+    sendResetPasswordEmail(ctx, user, token);
 
     ctx.body = {
       status: 'success'
@@ -113,7 +113,7 @@ exports.requestResetPassword = async ctx => {
 
 };
 
-exports.resetPassword = async ctx => {
+exports.setPassword = async ctx => {
 
   try {
 

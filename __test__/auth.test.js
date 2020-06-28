@@ -96,7 +96,7 @@ test('Canot access profile if not authenticated', async() => {
 test('Can access profile if authenticated', async() => {
 
   // Get fresh token
-  const token = await getFreshToken(request);
+  const { token } = await getFreshToken(request);
 
   // Access profile page sending the token
   const response = await request.get('/api/v1/users/profile')
@@ -109,7 +109,7 @@ test('Can access profile if authenticated', async() => {
 test('Should logout user and revoke token', async() => {
 
   // Get fresh token
-  const token = await getFreshToken(request);
+  const { token } = await getFreshToken(request);
 
   // Request logout
   const response = await request
@@ -133,7 +133,7 @@ test('Should logout user and revoke token', async() => {
 test('Should not be able to logout with revoked token', async() => {
 
   // Get fresh token
-  const token = await getFreshToken(request);
+  const { token } = await getFreshToken(request);
 
   // Request logout
   await request
@@ -158,10 +158,8 @@ test('Should not be able to logout with revoked token', async() => {
 
 test('Should revoke all tokens', async() => {
 
-  const { email } = getUserData();
-
-  // Get fresh token
-  const token = await getFreshToken(request);
+  // Get fresh token and it's associated user
+  const { token, user } = await getFreshToken(request);
 
   // Request logout all
   const logoutResponse = await request
@@ -170,7 +168,7 @@ test('Should revoke all tokens', async() => {
 
   // Query the user
   const dbUser = await User.query()
-    .findOne({ email })
+    .findOne({ email: user.email })
     .withGraphFetched('tokens');
 
   expect(logoutResponse.status).toBe(200);
@@ -183,7 +181,7 @@ test('Should revoke all tokens', async() => {
 test('Should validate existing token', async() => {
 
   // Get fresh token
-  const token = await getFreshToken(request);
+  const { token } = await getFreshToken(request);
 
   // Request to check the token validity
   const response = await request
@@ -197,7 +195,7 @@ test('Should validate existing token', async() => {
 test('Should not validate revoked tokens', async() => {
 
   // Get fresh token
-  const token = await getFreshToken(request);
+  const { token } = await getFreshToken(request);
 
   // Request logout (revoke token)
   await request
@@ -271,7 +269,7 @@ test('Should reset the password of user and make it unable to log with old passw
 
   // Actually reset the password with last token of the user
   const response = await request
-    .post('/api/v1/reset-password')
+    .post('/api/v1/set-password')
     .send({
       password: `${password}2`
     })
@@ -325,7 +323,7 @@ test('Should reset the password and generate a fresh token and revoke all other 
 
   // Actually reset the password with last token of the user
   const response = await request
-    .post('/api/v1/reset-password')
+    .post('/api/v1/set-password')
     .send({
       password: `${password}3`
     })

@@ -12,7 +12,7 @@ afterAll(tearDownDb);
 test('Should only be able to make a post request to graphql endpoint', async() => {
 
   // Get fresh token
-  const token = await getFreshToken(request);
+  const { token } = await getFreshToken(request);
 
   const query = `
     query {
@@ -72,10 +72,8 @@ test('Should be authenticated to make requests to graphql endpoint', async() => 
 
 test('Should only be able to query data related to authenticated user', async() => {
 
-  const { email } = getUserData();
-
-  // Get fresh token
-  const token = await getFreshToken(request);
+  // Get fresh token and related user from db
+  const { token, user } = await getFreshToken(request);
 
   // Query all users and all tokens
   const query = `
@@ -101,18 +99,13 @@ test('Should only be able to query data related to authenticated user', async() 
     })
     .set('Authorization', `Bearer ${token}`);
 
-  // Query the user
-  const dbUser = await User.query()
-    .findOne({ email })
-    .withGraphFetched('tokens');
-
   const responseData = response.body.data;
 
   // Make sure all the tokens return are only from the authenticated user
-  const allTokenAreFromAuthenticatedUser = responseData.tokens.every(tokenFromGraphQl => tokenFromGraphQl.user.id === dbUser.id);
+  const allTokenAreFromAuthenticatedUser = responseData.tokens.every(tokenFromGraphQl => tokenFromGraphQl.user.id === user.id);
 
   expect(responseData.users.length).toBe(1);
-  expect(responseData.users[0].id).toBe(dbUser.id);
+  expect(responseData.users[0].id).toBe(user.id);
   expect(allTokenAreFromAuthenticatedUser).toBe(true);
 
 });

@@ -3,8 +3,10 @@ const validateUserInput = require('./user.validations');
 const UserQueryBuilder = require('./user.queries');
 const { capitalize } = require('utils');
 
-// This plugin allow for automatic password hashing, if you want to allow an empty password you need to pass it allowEmptyPassword
-const Password = require('objection-password')();
+// This plugin allow for automatic password hashing, if you want to allow an empty password you need to pass it allowEmptyPassword (this way user can register and set their password after validating their email)
+const Password = require('objection-password')({
+  allowEmptyPassword: true
+});
 
 // This plugin allow for unique validation on model
 const Unique = require('objection-unique')({
@@ -31,7 +33,7 @@ exports.User = class User extends Password(Unique(BaseModel)) {
 
     return {
       type    : 'object',
-      required: [ 'email', 'password' ],
+      required: [ 'email' ],
 
       properties: {
         id   : { type: 'integer' },

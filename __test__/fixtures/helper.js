@@ -1,3 +1,5 @@
+const { User } = require('models');
+
 const testUser = {
   credentials: {
     email   : 'greatemail@exemple.com',
@@ -14,11 +16,17 @@ const getFreshToken = async request => {
 
   const { credentials } = getUserData();
 
-  const loginResponse = await request
+  await request
     .post('/api/v1/login')
     .send({ ...credentials });
 
-  return loginResponse.body.token.token;
+  const user = await User.query()
+    .findOne({ email: credentials.email })
+    .withGraphFetched('tokens(orderByCreation)');
+
+  return {
+    user, token: user.tokens[0].token
+  };
 
 };
 

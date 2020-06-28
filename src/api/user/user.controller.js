@@ -1,4 +1,5 @@
 const { User, Token } = require('models');
+const { sendConfirmationEmail } = require('models/User/Token/token.emails');
 
 // The user the the parameter comes from the authenticated middleware
 exports.getProfile = async ctx => {
@@ -71,13 +72,16 @@ exports.createOne = async ctx => {
     const user = await User.query().insert(validatedRequest);
 
     // Generate JWT token for the new user
+    const temporary = true;
     const token = await Token.query()
-      .generateAuthToken(user, userAgent);
+      .generateAuthToken(user, userAgent, temporary);
+
+    sendConfirmationEmail(ctx, user, token);
 
     // And send it back
     ctx.status = 201;
     ctx.body = {
-      status: 'success', user, token
+      status: 'success'
     };
 
   } catch (error) {

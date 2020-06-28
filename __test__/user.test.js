@@ -8,7 +8,7 @@ const { getFreshToken, getUserData } = require('./fixtures/helper');
 beforeAll(setUpDb);
 afterAll(tearDownDb);
 
-test('Should sign up new user, generating fresh token', async() => {
+test('Should sign up new user, sending new token by email', async() => {
 
   const newUser = {
     email: 'nezuser@email.com', password: 'P@ssword2000'
@@ -21,19 +21,24 @@ test('Should sign up new user, generating fresh token', async() => {
 
   // Query the new user
   const newUserDB = await User.query()
-    .findById(response.body.user.id)
-    .withGraphFetched('tokens');
+    .findOne({ email: newUser.email })
+    .withGraphFetched('tokens(orderByCreation)');
+
+  // Get the expiration date of last generated token
+  const now = new Date();
+  const tokenExpiration = new Date(newUserDB.tokens[0].expiration);
 
   expect(response.status).toBe(201);
+  expect(response.body).toEqual({ status: 'success' });
 
   // New user should exist in db
   expect(newUserDB).not.toBeUndefined();
 
-  // The right user should be returned
-  expect(response.body.user.email).toBe(newUserDB.email);
+  // The newt user should have one new token
+  expect(newUserDB.tokens.length).toBe(1);
 
-  // The right token should be returned
-  expect(response.body.token.token).toBe(newUserDB.tokens[0].token);
+  // The expiration date of new token should be in an hour
+  expect(tokenExpiration.getHours()).toBeLessThanOrEqual(now.getHours() + 1);
 
 });
 
@@ -44,28 +49,31 @@ test('Should update user', async() => {
   };
 
   // Create user
-  const responseNewUser = await request
+  await request
     .post('/api/v1/users')
     .send(newUser);
 
-  const { user, token } = responseNewUser.body;
+  // Query the new user
+  const { tokens, id, email } = await User.query()
+    .findOne({ email: newUser.email })
+    .withGraphFetched('tokens(orderByCreation)');
 
   // Request a user update with the fresh token
   const response = await request
-    .patch(`/api/v1/users/${user.id}`)
+    .patch(`/api/v1/users/${id}`)
     .send({
-      email: `changed${user.email}`
+      email: `changed${email}`
     })
-    .set('Authorization', `Bearer ${token.token}`);
+    .set('Authorization', `Bearer ${tokens[0].token}`);
 
   // Query the updated user
   const updatedUser = await User.query()
-    .findOne({ id: user.id });
+    .findOne({ id });
 
   expect(response.status).toBe(200);
 
   // The email should be different
-  expect(updatedUser.email).toBe(`changed${user.email}`);
+  expect(updatedUser.email).toBe(`changed${email}`);
 
 });
 
@@ -97,24 +105,27 @@ test('Should delete user', async() => {
   };
 
   // Create user
-  const responseNewUser = await request
+  await request
     .post('/api/v1/users')
     .send(newUser);
 
-  const { user, token } = responseNewUser.body;
+  // Query the new user
+  const { id, tokens } = await User.query()
+    .findOne({ email: newUser.email })
+    .withGraphFetched('tokens(orderByCreation)');
 
   // Request user delete
   const response = await request
-    .delete(`/api/v1/users/${user.id}`)
-    .set('Authorization', `Bearer ${token.token}`);
+    .delete(`/api/v1/users/${id}`)
+    .set('Authorization', `Bearer ${tokens[0].token}`);
 
   // Query user
-  const updatedUser = await User.query()
-    .findOne({ id: user.id });
+  const deletedUser = await User.query()
+    .findOne({ id });
 
   expect(response.status).toBe(200);
 
   // User should not been found in database
-  expect(updatedUser).toBeUndefined();
+  expect(deletedUser).toBeUndefined();
 
 });
