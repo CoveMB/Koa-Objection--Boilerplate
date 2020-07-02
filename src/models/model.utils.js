@@ -1,4 +1,4 @@
-const { ValidationError, NotFoundError } = require('config/errors/errorTypes');
+const { ValidationError, NotFoundError } = require('config/errors/error.types');
 
 const validateInput = (schema, input) => {
 

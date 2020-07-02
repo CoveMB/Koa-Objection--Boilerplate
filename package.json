@@ -36,6 +36,7 @@
     "objection-password": "^2.0.0",
     "objection-unique": "^1.0.1",
     "pg": "^8.0.3",
+    "uuid": "^8.2.0",
     "winston": "^3.2.1",
     "winston-sentry-log": "^1.0.14"
   },

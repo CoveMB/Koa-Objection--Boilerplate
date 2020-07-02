@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { Token } = require('models');
-const { NotAuthenticatedError } = require('config/errors/errorTypes');
+const { NotAuthenticatedError } = require('config/errors/error.types');
 const { jwtSecret } = require('config/variables');
 
 exports.authenticated = async(ctx, next) => {

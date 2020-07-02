@@ -1,5 +1,5 @@
-const { EmailNotSentError } = require('config/errors/errorTypes');
-const { errorEvent } = require('config/errors/errorEvent');
+const { EmailNotSentError } = require('config/errors/error.types');
+const { errorEvent } = require('config/errors/error.event');
 const { emailFrom, clientUrl } = require('config/variables');
 const sgMail = require('config/emails');
 

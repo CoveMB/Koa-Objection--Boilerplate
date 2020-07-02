@@ -5,14 +5,14 @@ exports.getByIdRecords = async(ctx, next) => {
 
   try {
 
-    const { requestId } = ctx;
+    const { requestUuid } = ctx;
 
     // Get the user
-    const user = await User.query().findById(requestId);
+    const user = await User.query().findOne({ uuid: requestUuid });
 
     validateFoundInstances([
       {
-        instance: user, type: 'User', search: requestId
+        instance: user, type: 'User', search: requestUuid
       }
     ]);
 

@@ -24,6 +24,7 @@ exports.Token = class Token extends BaseModel {
 
       properties: {
         id    : { type: 'integer' },
+        uuid  : { type: 'string' },
         userId: { type: 'integer' },
         device: {
           type: 'string', minLength: 1, maxLength: 255

@@ -17,7 +17,7 @@ module.exports = Router => {
       controller.getProfile
     )
     .get(
-      '/:id',
+      '/:uuid',
       authenticated,
       access.isSelfOrAdmin,
       records.getByIdRecords,
@@ -36,7 +36,7 @@ module.exports = Router => {
       controller.createOne
     )
     .patch(
-      '/:id',
+      '/:uuid',
       validateRequest(requests.createUpdateSchema, 'body'),
       authenticated,
       access.isSelfOrAdmin,
@@ -44,7 +44,7 @@ module.exports = Router => {
       controller.updateOne
     )
     .delete(
-      '/:id',
+      '/:uuid',
       authenticated,
       access.isSelfOrAdmin,
       records.getByIdRecords,

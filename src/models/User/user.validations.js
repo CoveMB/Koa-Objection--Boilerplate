@@ -1,5 +1,5 @@
 const passwordComplexity = require('joi-password-complexity');
-const { ValidationError } = require('config/errors/errorTypes');
+const { ValidationError } = require('config/errors/error.types');
 const Joi = require('@hapi/joi');
 const { validateInput } = require('../model.utils');
 

@@ -37,6 +37,7 @@ exports.User = class User extends Password(Unique(BaseModel)) {
 
       properties: {
         id   : { type: 'integer' },
+        uuid : { type: 'string' },
         email: {
           type: 'string', minLength: 1, maxLength: 255
         },

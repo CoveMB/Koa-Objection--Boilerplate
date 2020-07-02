@@ -1,5 +1,5 @@
 require('app-module-path').addPath(`${__dirname}/src`);
-const { ConfigError } = require('config/errors/errorTypes');
+const { ConfigError } = require('config/errors/error.types');
 const {
   dbHost, dbPort, dbUser, dbPassword, dbName
 } = require('./src/config/variables');

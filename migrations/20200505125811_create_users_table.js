@@ -4,13 +4,23 @@ exports.up = function(knex) {
   return knex.schema
     .createTable('user', table => {
 
-      table.increments('id').unsigned()
+      table
+        .increments('id')
+        .unsigned()
         .primary();
-      table.boolean('admin').defaultTo(false);
-      table.string('email')
+      table
+        .uuid('uuid')
+        .defaultTo(knex.raw('uuid_generate_v4()'));
+      table
+        .boolean('admin')
+        .defaultTo(false);
+      table
+        .string('email')
         .unique()
         .notNullable();
-      table.string('password').nullable();
+      table
+        .string('password')
+        .nullable();
       table.timestamp('created_at').defaultTo(knex.fn.now());
       table.timestamp('updated_at').defaultTo(null);
 
@@ -18,9 +28,16 @@ exports.up = function(knex) {
 
     .createTable('token', table => {
 
-      table.increments('id').unsigned()
+      table
+        .increments('id')
+        .unsigned()
         .primary();
-      table.string('token').notNullable();
+      table
+        .uuid('uuid')
+        .defaultTo(knex.raw('uuid_generate_v4()'));
+      table
+        .string('token')
+        .notNullable();
       table
         .integer('user_id')
         .unsigned()

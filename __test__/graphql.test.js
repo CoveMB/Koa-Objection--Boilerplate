@@ -2,7 +2,7 @@ const server = require('config/server');
 const request = require('supertest')(server.callback());
 const { setUpDb, tearDownDb } = require('./fixtures/setup');
 const { getFreshToken } = require('./fixtures/helper');
-const { NotAuthenticatedError } = require('config/errors/errorTypes');
+const { NotAuthenticatedError } = require('config/errors/error.types');
 
 // Setup
 beforeAll(setUpDb);
@@ -78,15 +78,14 @@ test('Should only be able to query data related to authenticated user', async() 
   const query = `
     query {
         users(orderBy: id) {
-          id
-   
+          email
         }
 
         tokens(orderBy: id) {
-          id
+          token
           device
           user {
-            id
+            email
           }
         }
     }`;
@@ -101,10 +100,10 @@ test('Should only be able to query data related to authenticated user', async() 
   const responseData = response.body.data;
 
   // Make sure all the tokens return are only from the authenticated user
-  const allTokenAreFromAuthenticatedUser = responseData.tokens.every(tokenFromGraphQl => tokenFromGraphQl.user.id === user.id);
+  const allTokenAreFromAuthenticatedUser = responseData.tokens.every(tokenFromGraphQl => tokenFromGraphQl.user.email === user.email);
 
   expect(responseData.users.length).toBe(1);
-  expect(responseData.users[0].id).toBe(user.id);
+  expect(responseData.users[0].email).toBe(user.email);
   expect(allTokenAreFromAuthenticatedUser).toBe(true);
 
 });

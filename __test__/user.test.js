@@ -2,7 +2,7 @@ const server = require('config/server');
 const request = require('supertest')(server.callback());
 const { User } = require('models');
 const { setUpDb, tearDownDb } = require('./fixtures/setup');
-const { ValidationError } = require('config/errors/errorTypes');
+const { ValidationError } = require('config/errors/error.types');
 const { getFreshToken, getUserData } = require('./fixtures/helper');
 
 beforeAll(setUpDb);
@@ -54,13 +54,15 @@ test('Should update user', async() => {
     .send(newUser);
 
   // Query the new user
-  const { tokens, id, email } = await User.query()
+  const {
+    tokens, id, email, uuid
+  } = await User.query()
     .findOne({ email: newUser.email })
     .withGraphFetched('tokens(orderByCreation)');
 
   // Request a user update with the fresh token
   const response = await request
-    .patch(`/api/v1/users/${id}`)
+    .patch(`/api/v1/users/${uuid}`)
     .send({
       email: `changed${email}`
     })
@@ -110,13 +112,13 @@ test('Should delete user', async() => {
     .send(newUser);
 
   // Query the new user
-  const { id, tokens } = await User.query()
+  const { id, tokens, uuid } = await User.query()
     .findOne({ email: newUser.email })
     .withGraphFetched('tokens(orderByCreation)');
 
   // Request user delete
   const response = await request
-    .delete(`/api/v1/users/${id}`)
+    .delete(`/api/v1/users/${uuid}`)
     .set('Authorization', `Bearer ${tokens[0].token}`);
 
   // Query user

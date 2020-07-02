@@ -1,7 +1,7 @@
 const graphqlHTTP = require('koa-graphql');
 const graphQlSchema  = require('config/graphql');
 const { isDevelopment } = require('config/variables');
-const { ImplementationMissingError } = require('config/errors/errorTypes');
+const { ImplementationMissingError } = require('config/errors/error.types');
 
 // All graphQL queries are handled by graphqlHTTP
 exports.graphql = async ctx => graphqlHTTP({

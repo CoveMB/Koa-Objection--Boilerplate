@@ -1,7 +1,7 @@
 const server = require('config/server');
 const request = require('supertest')(server.callback());
 const { User, Token } = require('models');
-const { NotAuthenticatedError } = require('config/errors/errorTypes');
+const { NotAuthenticatedError } = require('config/errors/error.types');
 const { setUpDb, tearDownDb } = require('./fixtures/setup');
 const { getFreshToken, getUserData } = require('./fixtures/helper');
 
@@ -43,18 +43,21 @@ test('Should generate fresh valid 6 month token on logging', async() => {
 
   // Get the generated token from database
   const token = await Token.query()
-    .findOne({ token: response.body.token.token })
-    .withGraphFetched('user');
+    .findOne({ token: response.body.token.token });
 
   // Get it's expiration date
   const now = new Date();
-  const tokenExpiration = new Date(response.body.token.expiration);
+
+  // Mutate now to be 6 month from now
+  now.setMonth(now.getMonth() + 6);
+
+  const tokenExpiration = new Date(token.expiration);
 
   // The right token is return
   expect(response.body.token.token).toBe(token.token);
 
   //  Should be more than 6 mont valid
-  expect(tokenExpiration.getMonth()).toBe(now.getMonth() + 6);
+  expect(tokenExpiration.getMonth()).toBe(now.getMonth());
 
 });
 
@@ -239,6 +242,10 @@ test('Should request a password reset generating a temporary 1h valid token', as
 
   // Get expiration date of last token
   const now = new Date();
+
+  // Mutate now to be 1 hour from now
+  now.setHours(now.getHours() + 1);
+
   const tokenExpiration = new Date(userDb.tokens[0].expiration);
 
   expect(response.status).toBe(200);
@@ -247,7 +254,7 @@ test('Should request a password reset generating a temporary 1h valid token', as
   expect(response.body.token).toBeUndefined();
 
   // The expiration date should be in an hour
-  expect(tokenExpiration.getHours()).toBeLessThanOrEqual(now.getHours() + 1);
+  expect(tokenExpiration.getHours()).toBeLessThanOrEqual(now.getHours());
 
 });
 
@@ -334,15 +341,20 @@ test('Should reset the password and generate a fresh token and revoke all other 
     .findOne({ email })
     .withGraphFetched('tokens(orderByCreation)');
 
-  // Get the expiration date of last generated token
+  // Get it's expiration date
   const now = new Date();
+
+  // Mutate now to be 6 month from now
+  now.setMonth(now.getMonth() + 6);
+
+  // Get the expiration date of last generated token
   const tokenExpiration = new Date(userDbAfterReset.tokens[0].expiration);
 
   // The body should contains the new token
   expect(response.body.token.token).toBe(userDbAfterReset.tokens[0].token);
 
   // The new token should be 6 month valid
-  expect(tokenExpiration.getMonth()).toBe(now.getMonth() + 6);
+  expect(tokenExpiration.getMonth()).toBe(now.getMonth());
 
   // All other tokens should has been revoked
   expect(userDbAfterReset.tokens.length).toBe(1);

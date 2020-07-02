@@ -1,5 +1,5 @@
 const joi = require('@hapi/joi');
-const { ConfigError } = require('config/errors/errorTypes');
+const { ConfigError } = require('config/errors/error.types');
 
 /**
  * Generate a validation schema using joi to check the type of your environment variables

@@ -1,4 +1,4 @@
-const { errorEvent } = require('config/errors/errorEvent');
+const { errorEvent } = require('config/errors/error.event');
 const { ForeignKeyViolationError, ValidationError } = require('objection');
 const { capitalize } = require('utils');
 

@@ -1,5 +1,5 @@
 const { QueryBuilder } = require('objection');
-const { NotAuthenticatedError, ExpiredTokenError } = require('config/errors/errorTypes');
+const { NotAuthenticatedError, ExpiredTokenError } = require('config/errors/error.types');
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('config/variables');
 

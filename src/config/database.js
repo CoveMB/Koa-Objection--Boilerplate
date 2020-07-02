@@ -1,7 +1,7 @@
 const Knex = require('knex');
 const logger = require('config/logger');
 const { Model } = require('objection');
-const { ConfigError } = require('config/errors/errorTypes');
+const { ConfigError } = require('config/errors/error.types');
 
 const connect = () => {
 

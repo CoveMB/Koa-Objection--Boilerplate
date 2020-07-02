@@ -27,6 +27,18 @@ class BaseModel extends Model {
 
   }
 
+  // Omit fields for json response from model
+  $formatJson(instance) {
+
+    super.$formatJson(instance);
+
+    delete instance.id;
+
+    return instance;
+
+  }
+
+  // Add an updated value each time a model is updated
   $beforeUpdate() {
 
     this.updated_at = new Date().toISOString();

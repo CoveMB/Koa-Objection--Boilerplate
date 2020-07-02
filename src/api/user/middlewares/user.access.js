@@ -1,4 +1,4 @@
-const { NotAuthorizeError } = require('config/errors/errorTypes');
+const { NotAuthorizeError } = require('config/errors/error.types');
 
 exports.isSelfOrAdmin = async(ctx, next) => {
 
@@ -6,11 +6,10 @@ exports.isSelfOrAdmin = async(ctx, next) => {
 
     const { params, authenticated } = ctx;
     const { user } = authenticated;
-    const id = Number(params.id);
 
-    if (user.id === id || user.admin) {
+    if (user.uuid === params.uuid || user.admin) {
 
-      ctx.requestId = id;
+      ctx.requestUuid = params.uuid;
 
     } else {
 

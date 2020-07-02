@@ -1,5 +1,5 @@
 const { QueryBuilder } = require('objection');
-const { LoginError } = require('config/errors/errorTypes');
+const { LoginError } = require('config/errors/error.types');
 
 class UserQueryBuilder extends QueryBuilder {
 
