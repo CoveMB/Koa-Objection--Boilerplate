@@ -7,31 +7,39 @@ const { errorEvent, errorHandler } = require('config/errors/error.event');
 const registerRouters = require('api');
 const { log, error } = require('globalMiddlewares');
 const { corsOptions } = require('config/cors');
+const helmet = require('koa-helmet')();
 
-/**
- * Create app
-*/
-const app = new Koa();
+const configServer = () => {
 
-/**
- * Register global middlewares
-*/
+  /**
+   * Create app
+  */
+  const app = new Koa();
 
-app.use(cors(corsOptions))    // Configure cors
-  .use(userAgent)             // Attach user agent to the context
-  .use(bodyParser)            // Parse the body request
-  .use(log)                   // Log every logRequests
-  .use(error)                 // Handle trowed errors
-  .use(compress);             // Allow compress
+  /**
+   * Register global middlewares
+  */
 
-/**
- * Register events
-*/
-app.on(errorEvent, errorHandler);
+  app.use(helmet)            // Provides security headers
+    .use(cors(corsOptions))    // Configure cors
+    .use(userAgent)            // Attach user agent to the context
+    .use(bodyParser)         // Parse the body request
+    .use(log)                  // Log every logRequests
+    .use(error)                // Handle trowed errors
+    .use(compress);          // Allow compress
 
-/**
- * Apply global router
-*/
-const server = registerRouters(app);
+  /**
+   * Register events
+  */
+  app.on(errorEvent, errorHandler);
 
-module.exports = server;
+  /**
+   * Apply global router
+  */
+  registerRouters(app);
+
+  return app;
+
+};
+
+module.exports = configServer;

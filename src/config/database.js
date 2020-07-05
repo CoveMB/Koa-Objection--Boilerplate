@@ -1,6 +1,4 @@
 const Knex = require('knex');
-const logger = require('config/logger');
-const { Model } = require('objection');
 const { ConfigError } = require('config/errors/error.types');
 
 const connect = () => {
@@ -16,8 +14,6 @@ const connect = () => {
 
       // This little query make sure the connection is established
       await knex.select(knex.raw('1'));
-
-      Model.knex(knex);
 
       return knex;
 

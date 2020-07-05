@@ -1,8 +1,8 @@
-const server = require('config/server');
+const server = require('config/server')();
 const request = require('supertest')(server.callback());
+const { NotAuthenticatedError } = require('config/errors/error.types');
 const { setUpDb, tearDownDb } = require('./fixtures/setup');
 const { getFreshToken } = require('./fixtures/helper');
-const { NotAuthenticatedError } = require('config/errors/error.types');
 
 // Setup
 beforeAll(setUpDb);

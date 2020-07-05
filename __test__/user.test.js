@@ -1,8 +1,8 @@
-const server = require('config/server');
+const server = require('config/server')();
 const request = require('supertest')(server.callback());
 const { User } = require('models');
-const { setUpDb, tearDownDb } = require('./fixtures/setup');
 const { ValidationError } = require('config/errors/error.types');
+const { setUpDb, tearDownDb } = require('./fixtures/setup');
 const { getFreshToken, getUserData } = require('./fixtures/helper');
 
 beforeAll(setUpDb);

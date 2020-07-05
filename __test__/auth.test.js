@@ -1,4 +1,4 @@
-const server = require('config/server');
+const server = require('config/server')();
 const request = require('supertest')(server.callback());
 const { User, Token } = require('models');
 const { NotAuthenticatedError } = require('config/errors/error.types');
