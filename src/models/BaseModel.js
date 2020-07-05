@@ -1,40 +1,14 @@
-const { Model, QueryBuilder } = require('objection');
+const { Model } = require('objection');
+const BaseModelQueryBuilder = require('./BaseModel.queries');
+
+// const BaseModelQueryBuilder = require('./BaseModel.queries');
 
 class BaseModel extends Model {
 
   static get QueryBuilder() {
 
     // This register the custom query builder
-    return class BaseModelQueryBuilder extends QueryBuilder {
-
-      async findOrCreate(data) {
-
-        // Try to find existing instance
-        let instance = await this.findOne(data);
-
-        // If no instance exist create one
-        if (!instance) {
-
-          instance = await this.insert(data);
-
-        }
-
-        return instance;
-
-      }
-
-    };
-
-  }
-
-  // Omit fields for json response from model
-  $formatJson(instance) {
-
-    super.$formatJson(instance);
-
-    delete instance.id;
-
-    return instance;
+    return BaseModelQueryBuilder;
 
   }
 
