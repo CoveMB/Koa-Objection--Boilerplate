@@ -1,6 +1,8 @@
-const { ValidationError, NotFoundError } = require('config/errors/error.types');
+import { Model } from 'objection';
 
-const validateInput = (schema, input) => {
+import { ValidationError, NotFoundError } from 'config/errors/error.types';
+
+const validateInput = (schema, input): void => {
 
   const { error } = schema.validate(input);
 
@@ -12,7 +14,9 @@ const validateInput = (schema, input) => {
 
 };
 
-const validateFoundInstances = instancesToCheck => {
+const validateFoundInstances = (
+  instancesToCheck: {instance: Model, type: string, search: string | number}[]
+): void => {
 
   instancesToCheck.forEach(instanceToCheck => {
 
@@ -28,6 +32,6 @@ const validateFoundInstances = instancesToCheck => {
 
 };
 
-module.exports = {
+export {
   validateInput, validateFoundInstances
 };

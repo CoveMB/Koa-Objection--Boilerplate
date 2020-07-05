@@ -3,9 +3,8 @@
   "description": "Boilerplate Dockerized Express app",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js",
-    "dev": "nodemon --inspect=0.0.0.0:9229 --signal SIGTERM --ext js ./src/app.js",
-    "debug": "node --inspect-brk=0.0.0.0:9229 ./src/app.js",
+    "start": "tsc && node dist/src/app.js",
+    "dev": "ts-node-dev --ignore-watch node_modules --inspect=0.0.0.0:9229 -- ./src/app.ts",
     "test-watch": "jest --watchAll -i",
     "test": "jest -i",
     "test-one": "jest"
@@ -41,18 +40,29 @@
     "winston-sentry-log": "^1.0.14"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.3",
+    "@types/koa": "^2.11.3",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-router": "^7.4.1",
+    "@types/node": "^14.0.14",
+    "@types/supertest": "^2.0.10",
+    "@typescript-eslint/eslint-plugin": "^3.5.0",
+    "@typescript-eslint/parser": "^3.5.0",
     "eslint": "^6.7.2",
-    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-airbnb-typescript": "^8.0.2",
     "eslint-config-koa": "^2.0.2",
     "eslint-config-standard": "12.0.0",
     "eslint-import-resolver-node": "^0.3.3",
     "eslint-plugin-eslint-plugin": "^2.1.0",
     "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jest": "^23.18.0",
     "eslint-plugin-node": "9.0.1",
     "eslint-plugin-promise": "4.1.1",
     "eslint-plugin-standard": "4.0.0",
     "jest": "^26.0.1",
-    "nodemon": "^2.0.2 ",
-    "supertest": "^4.0.2"
+    "supertest": "^4.0.2",
+    "ts-jest": "^26.1.1",
+    "ts-node-dev": "^1.0.0-pre.50",
+    "typescript": "^3.9.6"
   }
 }

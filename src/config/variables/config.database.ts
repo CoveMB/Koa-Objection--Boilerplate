@@ -1,5 +1,5 @@
-const joi = require('@hapi/joi');
-const { ConfigError } = require('config/errors/error.types');
+import joi from '@hapi/joi';
+import { ConfigError } from 'config/errors/error.types';
 
 /**
  * Generate a validation schema using joi to check the type of your environment variables
@@ -29,14 +29,8 @@ if (error) {
 
 }
 
-const database = {
-
-  dbName    : envVars.DB_NAME,
-  dbHost    : envVars.DB_HOST,
-  dbPort    : envVars.DB_PORT,
-  dbUser    : envVars.DB_USER,
-  dbPassword: envVars.DB_PASSWORD
-
-};
-
-module.exports = database;
+export const dbName = envVars.DB_NAME;
+export const dbHost = envVars.DB_HOST;
+export const dbPort = envVars.DB_PORT;
+export const dbUser = envVars.DB_USER;
+export const dbPassword = envVars.DB_PASSWORD;

@@ -11,6 +11,7 @@ services:
     env_file: .env
     ports:
       - ${PORT}:${PORT}
+      # Port mapping for debug
       - 9229:9229
     volumes:
       - .:/node/app:delegated

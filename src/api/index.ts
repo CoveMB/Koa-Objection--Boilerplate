@@ -1,7 +1,7 @@
-const Router = require('koa-router');
-const fs = require('fs');
-const path = require('path');
-const { apiVersion } = require('config/variables').server;
+import { apiVersion } from 'config/variables';
+import fs from 'fs';
+import Router from 'koa-router';
+import path from 'path';
 
 const baseName = path.basename(__filename);
 
@@ -27,4 +27,4 @@ const registerRouters = app => {
 
 };
 
-module.exports = registerRouters;
+export default registerRouters;

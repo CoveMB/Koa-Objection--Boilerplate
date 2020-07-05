@@ -1,4 +1,4 @@
-const getFullDate = () => {
+const getFullDate = (): string => {
 
   const now = new Date();
 
@@ -6,4 +6,4 @@ const getFullDate = () => {
 
 };
 
-module.exports = { getFullDate };
+export { getFullDate };

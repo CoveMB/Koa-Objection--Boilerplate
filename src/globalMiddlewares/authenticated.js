@@ -3,7 +3,7 @@ const { Token } = require('models');
 const { NotAuthenticatedError } = require('config/errors/error.types');
 const { jwtSecret } = require('config/variables');
 
-exports.authenticated = async(ctx, next) => {
+exports.authenticated = async (ctx, next) => {
 
   try {
 

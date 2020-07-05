@@ -1,7 +1,8 @@
-const BaseModel = require('models/BaseModel');
-const validateUserInput = require('./user.validations');
-const UserQueryBuilder = require('./user.queries');
-const { capitalize } = require('utils');
+import BaseModel from 'models/BaseModel';
+import { capitalize } from 'utils';
+import { Token } from 'models';
+import validateUserInput from './user.validations';
+import UserQueryBuilder from './user.queries';
 
 // This plugin allow for automatic password hashing, if you want to allow an empty password you need to pass it allowEmptyPassword (this way user can register and set their password after validating their email)
 const Password = require('objection-password')({
@@ -14,7 +15,12 @@ const Unique = require('objection-unique')({
   identifiers: [ 'id' ]
 });
 
-exports.User = class User extends Password(Unique(BaseModel)) {
+export default class User extends Password(Unique(BaseModel)) {
+
+  id!: number;
+  uuid!: string;
+  email!: string;
+  token!: Token;
 
   static get tableName() {
 
@@ -29,48 +35,35 @@ exports.User = class User extends Password(Unique(BaseModel)) {
 
   }
 
-  static get jsonSchema() {
+  static jsonSchema = {
+    type    : 'object',
+    required: [ 'email' ],
 
-    return {
-      type    : 'object',
-      required: [ 'email' ],
-
-      properties: {
-        id   : { type: 'integer' },
-        uuid : { type: 'string' },
-        email: {
-          type: 'string', minLength: 1, maxLength: 255
-        },
-        password: {
-          type: 'string', minLength: 1, maxLength: 255
-        },
-        admin: {
-          type: 'boolean'
-        }
+    properties: {
+      id   : { type: 'integer' },
+      uuid : { type: 'string' },
+      email: {
+        type: 'string', minLength: 1, maxLength: 255
+      },
+      password: {
+        type: 'string', minLength: 1, maxLength: 255
+      },
+      admin: {
+        type: 'boolean'
       }
-    };
+    }
+  };
 
-  }
-
-  static get relationMappings() {
-
-    const {
-      Token
-      // eslint-disable-next-line global-require
-    } = require('models');
-
-    return {
-      tokens: {
-        relation  : BaseModel.HasManyRelation,
-        modelClass: Token,
-        join      : {
-          from: 'user.id',
-          to  : 'token.user_id'
-        }
+  static relationMappings = () => ({
+    tokens: {
+      relation  : BaseModel.HasManyRelation,
+      modelClass: Token,
+      join      : {
+        from: 'user.id',
+        to  : 'token.user_id'
       }
-    };
-
-  }
+    }
+  });
 
   // Omit fields for json response from model
   $formatJson(user) {
@@ -148,4 +141,4 @@ exports.User = class User extends Password(Unique(BaseModel)) {
 
   }
 
-};
+}

@@ -1,6 +1,6 @@
-const logger = require('config/logger');
-const utils = require('utils');
-const { sanitizeExposedBody } = require('utils/sanitizer');
+import logger from 'config/logger';
+import utils from 'utils';
+import { sanitizeExposedBody } from 'utils/sanitizer';
 
 const errorEvent = 'error';
 
@@ -11,6 +11,4 @@ const errorHandler = async(error, ctx) => {
 
 };
 
-module.exports = {
-  errorHandler, errorEvent
-};
+export { errorHandler, errorEvent };

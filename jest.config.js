@@ -1,4 +1,6 @@
 module.exports = {
-  verbose    : true,
-  modulePaths: [ '<rootDir>/src/' ],
+  preset         : 'ts-jest',
+  testEnvironment: 'node',
+  verbose        : true,
+  modulePaths    : [ '<rootDir>/src/' ]
 };

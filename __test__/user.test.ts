@@ -1,14 +1,17 @@
-const server = require('config/server');
-const request = require('supertest')(server.callback());
-const { User } = require('models');
-const { setUpDb, tearDownDb } = require('./fixtures/setup');
-const { ValidationError } = require('config/errors/error.types');
-const { getFreshToken, getUserData } = require('./fixtures/helper');
+import { ValidationError } from 'config/errors/error.types';
+import configServer from 'config/server';
+import { User } from 'models';
+import requestSetUp from 'supertest';
+import { getFreshToken, getUserData } from './fixtures/helper';
+import { setUpDb, tearDownDb } from './fixtures/setup';
+
+const server = configServer();
+const request = requestSetUp(server.callback());
 
 beforeAll(setUpDb);
 afterAll(tearDownDb);
 
-test('Should sign up new user, sending new token by email', async() => {
+test('Should sign up new user, sending new token by email', async () => {
 
   const newUser = {
     email: 'nezuser@email.com', password: 'P@ssword2000'
@@ -42,7 +45,7 @@ test('Should sign up new user, sending new token by email', async() => {
 
 });
 
-test('Should update user', async() => {
+test('Should update user', async () => {
 
   const newUser = {
     email: 'nezuser2@email.com', password: 'P@ssword2000'
@@ -79,7 +82,7 @@ test('Should update user', async() => {
 
 });
 
-test('Should not update user if invalid field is sent', async() => {
+test('Should not update user if invalid field is sent', async () => {
 
   const { id } = getUserData();
 
@@ -100,7 +103,7 @@ test('Should not update user if invalid field is sent', async() => {
 
 });
 
-test('Should delete user', async() => {
+test('Should delete user', async () => {
 
   const newUser = {
     email: 'nezuser2@email.com', password: 'P@ssword2000'

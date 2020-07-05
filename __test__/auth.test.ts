@@ -1,15 +1,19 @@
-const server = require('config/server');
-const request = require('supertest')(server.callback());
-const { User, Token } = require('models');
-const { NotAuthenticatedError } = require('config/errors/error.types');
-const { setUpDb, tearDownDb } = require('./fixtures/setup');
-const { getFreshToken, getUserData } = require('./fixtures/helper');
+
+import { NotAuthenticatedError } from 'config/errors/error.types';
+import configServer from 'config/server';
+import { Token, User } from 'models';
+import requestSetUp from 'supertest';
+import { getFreshToken, getUserData } from './fixtures/helper';
+import { setUpDb, tearDownDb } from './fixtures/setup';
+
+const server = configServer();
+const request = requestSetUp(server.callback());
 
 // Setup
 beforeAll(setUpDb);
 afterAll(tearDownDb);
 
-test('Should login user with correct authentication dont return plain password', async() => {
+test('Should login user with correct authentication dont return plain password', async () => {
 
   const { credentials, email, password } = getUserData();
 
@@ -32,7 +36,7 @@ test('Should login user with correct authentication dont return plain password',
 
 });
 
-test('Should generate fresh valid 6 month token on logging', async() => {
+test('Should generate fresh valid 6 month token on logging', async () => {
 
   const { credentials } = getUserData();
 
@@ -61,7 +65,7 @@ test('Should generate fresh valid 6 month token on logging', async() => {
 
 });
 
-test('Should not login user with wrong password', async() => {
+test('Should not login user with wrong password', async () => {
 
   const { email, password } = getUserData();
 
@@ -80,7 +84,7 @@ test('Should not login user with wrong password', async() => {
 
 });
 
-test('Canot access profile if not authenticated', async() => {
+test('Canot access profile if not authenticated', async () => {
 
   // Try to access one user
   const response = await request.get('/api/v1/users/1');
@@ -96,7 +100,7 @@ test('Canot access profile if not authenticated', async() => {
 
 });
 
-test('Can access profile if authenticated', async() => {
+test('Can access profile if authenticated', async () => {
 
   // Get fresh token
   const { token } = await getFreshToken(request);
@@ -109,7 +113,7 @@ test('Can access profile if authenticated', async() => {
 
 });
 
-test('Should logout user and revoke token', async() => {
+test('Should logout user and revoke token', async () => {
 
   // Get fresh token
   const { token } = await getFreshToken(request);
@@ -133,7 +137,7 @@ test('Should logout user and revoke token', async() => {
 
 });
 
-test('Should not be able to logout with revoked token', async() => {
+test('Should not be able to logout with revoked token', async () => {
 
   // Get fresh token
   const { token } = await getFreshToken(request);
@@ -159,7 +163,7 @@ test('Should not be able to logout with revoked token', async() => {
 
 });
 
-test('Should revoke all tokens', async() => {
+test('Should revoke all tokens', async () => {
 
   // Get fresh token and it's associated user
   const { token, user } = await getFreshToken(request);
@@ -181,7 +185,7 @@ test('Should revoke all tokens', async() => {
 
 });
 
-test('Should validate existing token', async() => {
+test('Should validate existing token', async () => {
 
   // Get fresh token
   const { token } = await getFreshToken(request);
@@ -195,7 +199,7 @@ test('Should validate existing token', async() => {
 
 });
 
-test('Should not validate revoked tokens', async() => {
+test('Should not validate revoked tokens', async () => {
 
   // Get fresh token
   const { token } = await getFreshToken(request);
@@ -224,7 +228,7 @@ test('Should not validate revoked tokens', async() => {
 
 });
 
-test('Should request a password reset generating a temporary 1h valid token', async() => {
+test('Should request a password reset generating a temporary 1h valid token', async () => {
 
   const { email } = getUserData();
 
@@ -258,7 +262,7 @@ test('Should request a password reset generating a temporary 1h valid token', as
 
 });
 
-test('Should reset the password of user and make it unable to log with old password', async() => {
+test('Should reset the password of user and make it unable to log with old password', async () => {
 
   const { credentials, password, email } = getUserData();
 
@@ -307,7 +311,7 @@ test('Should reset the password of user and make it unable to log with old passw
 
 });
 
-test('Should reset the password and generate a fresh token and revoke all other tokens', async() => {
+test('Should reset the password and generate a fresh token and revoke all other tokens', async () => {
 
   const { credentials, password, email } = getUserData();
 

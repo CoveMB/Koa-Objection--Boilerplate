@@ -18,14 +18,14 @@ exports.graphql = async ctx => graphqlHTTP({
   rootValue: {
 
     // This will be trigger for every graphql query
-    async onQuery(query) {
+    async onQuery (query) {
 
       // A query from the graphql endpoint will have a special context
       query.context({
 
         // This will run for every query builder built from the graphql query
         // For the queried entities/model and the related entities as well
-        runBefore(result, builder) {
+        runBefore (result, builder) {
 
           // We get the authenticated user from the context (cf authenticated middleware)
           const { user } = ctx.authenticated;

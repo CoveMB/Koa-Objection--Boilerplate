@@ -4,7 +4,7 @@ const knex = require('knex')(knexConfig);
 const { User } = require('models');
 const { getUserData } = require('./helper');
 
-const setUpDb = async() => {
+const setUpDb = async () => {
 
   await knex.migrate.latest();
   await Model.knex(knex);

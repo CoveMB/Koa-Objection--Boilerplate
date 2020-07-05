@@ -1,5 +1,6 @@
 // bcrypt is included in the objection-password package
-const bcrypt = require('bcrypt');
+import bcrypt from 'bcrypt';
+import * as Knex from 'knex';
 
 const {
   ADMIN_TOKEN,
@@ -8,7 +9,7 @@ const {
 
 const password = bcrypt.hashSync(process.env.INITIAL_PASSWORD, 12);
 
-exports.seed = function(knex) {
+export async function seed(knex: Knex): Promise<any> {
 
   // Deletes ALL existing entries
   return knex('user').del()
@@ -27,10 +28,8 @@ exports.seed = function(knex) {
           admin: false,
           password
         },
-      ])
-    )
-    .then(() =>
-      knex('token').del())
+      ]))
+    .then(() => knex('token').del())
     .then(() =>
 
     // Inserts seed entries
@@ -43,7 +42,6 @@ exports.seed = function(knex) {
           token  : USER_TOKEN,
           user_id: 2
         }
-      ])
-    );
+      ]));
 
-};
+}

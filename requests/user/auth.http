@@ -26,6 +26,10 @@ Accept: */*
 content-type: application/json
 Authorization: Bearer {{ $dotenv USER_TOKEN }}
 
+# {
+#     "token": {{ $dotenv USER_TOKEN }}
+# }
+
 
 ### Logout (all)
 POST {{baseUrl}}/{{version}}/logoutAll

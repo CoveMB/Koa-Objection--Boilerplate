@@ -1,5 +1,5 @@
-const joi = require('@hapi/joi');
-const { ConfigError } = require('config/errors/error.types');
+import joi from '@hapi/joi';
+import { ConfigError } from 'config/errors/error.types';
 
 /**
  * Generate a validation schema using joi to check the type of your environment variables
@@ -32,14 +32,8 @@ if (error) {
 
 }
 
-const secrets = {
-
-  jwtSecret     : envVars.JWT_SECRET,
-  sendGridSecret: envVars.SENDGRID_SECRET,
-  sentryDNS     : envVars.SENTRY_DNS,
-  sentryEnv     : envVars.SENTRY_ENVIRONMENT,
-  emailFrom     : envVars.EMAIL_FROM
-
-};
-
-module.exports = secrets;
+export const jwtSecret = envVars.JWT_SECRET;
+export const sendGridSecret = envVars.SENDGRID_SECRET;
+export const sentryDNS = envVars.SENTRY_DNS;
+export const sentryEnv = envVars.SENTRY_ENVIRONMENT;
+export const emailFrom = envVars.EMAIL_FROM;

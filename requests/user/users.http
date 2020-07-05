@@ -25,8 +25,7 @@ content-type: application/json
 
 {
     "email": "user4@email.com",
-    "password": "isUser@2000",
-    "admin": false
+    "password": "isUser@2000"
 }
 
 ### POST users (create) Admin

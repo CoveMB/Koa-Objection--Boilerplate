@@ -2,21 +2,35 @@ module.exports = {
 
   parserOptions: {
     ecmaVersion: 10,
-    parser: "babel-eslint"
+    parser: "@typescript-eslint/parser",
+    project: './tsconfig.json'
   },
-  "extends": ["eslint:recommended", 'airbnb/base', 'koa'],
+  extends: 
+  [
+    "plugin:@typescript-eslint/recommended", 
+    'airbnb-typescript/base', 
+    'koa', 
+    'plugin:jest/recommended'
+  ],
   plugins: [
-    'eslint-plugin',
+    "@typescript-eslint",
   ],
   settings: {
     'import/resolver':{
       node:{
-        extensions: ['.js'],
+        extensions: ['.js', '.ts'],
         moduleDirectory: ['node_modules', './src']
       }
     }
   },
   "rules": {
+    'import/extensions': ['error', 'ignorePackages', {
+      js: 'never',
+      ts: 'never',
+    }],
+    // Typescript
+    "@typescript-eslint/lines-between-class-members": ["warn", {"exceptAfterOverload": true}],
+    // length
     "max-len": [
       "warn",
       {
@@ -27,9 +41,9 @@ module.exports = {
         "ignoreTemplateLiterals": true
       }
     ],
-    // "import/no-unresolved": "off",
     "import/prefer-default-export": "off",
     "no-console": "off",
+    "no-unused-vars": "off",
     "quotes": [
       "warn",
       "single"
@@ -39,7 +53,7 @@ module.exports = {
     "keyword-spacing": "warn",
     "no-trailing-spaces": "warn",
     "space-before-blocks": "warn",
-    "space-before-function-paren": "warn",
+    "space-before-function-paren": ["warn", {"anonymous": "always", "named": "never", "asyncArrow": "always"}],
     "key-spacing": [
       "warn",
       {
@@ -125,7 +139,7 @@ module.exports = {
         "omitLastInOneLineBlock": false
       }
     ],
-    "indent": [
+    "@typescript-eslint/indent": [
       "warn",
       2,
       {"SwitchCase": 1}
@@ -155,8 +169,16 @@ module.exports = {
           "minProperties": 2,
           "consistent": true 
         },
-        "ImportDeclaration": "never",
-        "ExportDeclaration": "never"
+        "ImportDeclaration": {
+          "multiline": true,
+          "minProperties": 4,
+          "consistent": true 
+        },
+        "ExportDeclaration": {
+          "multiline": true,
+          "minProperties": 4,
+          "consistent": true 
+        }
       }
     ],
     // Array rules

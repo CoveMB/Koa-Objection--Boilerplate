@@ -1,4 +1,4 @@
-const sanitizeExposedBody = body => {
+const sanitizeExposedBody = (body: Record<string, string | number>): string => {
 
   const sanitizedBody = JSON.parse(JSON.stringify(body));
 
@@ -24,4 +24,4 @@ const sanitizeExposedBody = body => {
 
 };
 
-module.exports = { sanitizeExposedBody };
+export { sanitizeExposedBody };

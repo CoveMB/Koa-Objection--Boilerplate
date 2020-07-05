@@ -1,14 +1,17 @@
-const server = require('config/server');
-const request = require('supertest')(server.callback());
-const { setUpDb, tearDownDb } = require('./fixtures/setup');
-const { getFreshToken } = require('./fixtures/helper');
-const { NotAuthenticatedError } = require('config/errors/error.types');
+import configServer from 'config/server';
+import requestSetUp from 'supertest';
+import { NotAuthenticatedError } from 'config/errors/error.types';
+import { getFreshToken } from './fixtures/helper';
+import { setUpDb, tearDownDb } from './fixtures/setup';
+
+const server = configServer();
+const request = requestSetUp(server.callback());
 
 // Setup
 beforeAll(setUpDb);
 afterAll(tearDownDb);
 
-test('Should only be able to make a post request to graphql endpoint', async() => {
+test('Should only be able to make a post request to graphql endpoint', async () => {
 
   // Get fresh token
   const { token } = await getFreshToken(request);
@@ -39,7 +42,7 @@ test('Should only be able to make a post request to graphql endpoint', async() =
 
 });
 
-test('Should be authenticated to make requests to graphql endpoint', async() => {
+test('Should be authenticated to make requests to graphql endpoint', async () => {
 
   const query = `
     query {
@@ -69,7 +72,7 @@ test('Should be authenticated to make requests to graphql endpoint', async() => 
 
 });
 
-test('Should only be able to query data related to authenticated user', async() => {
+test('Should only be able to query data related to authenticated user', async () => {
 
   // Get fresh token and related user from db
   const { token, user } = await getFreshToken(request);

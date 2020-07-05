@@ -1,5 +1,6 @@
+import * as Knex from 'knex';
 
-exports.up = function(knex) {
+export async function up(knex: Knex): Promise<any> {
 
   return knex.schema
     .createTable('user', table => {
@@ -51,12 +52,12 @@ exports.up = function(knex) {
 
     });
 
-};
+}
 
-exports.down = function(knex) {
+export async function down(knex: Knex): Promise<any> {
 
   return knex.schema
     .dropTableIfExists('token')
     .dropTableIfExists('user');
 
-};
+}

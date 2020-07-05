@@ -15,3 +15,8 @@ globalConfig.json
 
 **/*secret.yaml
 **/.env
+/.env
+
+
+# Dist typescript compilation folder
+dist

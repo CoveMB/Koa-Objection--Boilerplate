@@ -1,10 +1,14 @@
-require('app-module-path').addPath(`${__dirname}/src`);
-const { ConfigError } = require('config/errors/error.types');
-const {
-  dbHost, dbPort, dbUser, dbPassword, dbName
-} = require('./src/config/variables');
+/* eslint-disable import/first */
+import { addPath } from 'app-module-path';
 
-module.exports = (configType = 'production') => {
+addPath(`${__dirname}/src`);
+
+import { ConfigError } from 'config/errors/error.types';
+import {
+  dbHost, dbPort, dbUser, dbPassword, dbName
+} from 'config/variables';
+
+const getKnexConfig = (configType: 'production' | 'test' = 'production') => {
 
   if (configType === 'production') {
 
@@ -47,3 +51,6 @@ module.exports = (configType = 'production') => {
   throw new ConfigError('Please select a proper database config type');
 
 };
+
+module.exports = getKnexConfig;
+export default getKnexConfig;
