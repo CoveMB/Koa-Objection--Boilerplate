@@ -5,13 +5,14 @@ import TokenQueryBuilder from './token.queries';
 export default class Token extends BaseModel {
 
   id!: number;
-  name!: string;
   uuid!: string;
   userId!: number;
   device!: string;
   expiration!: string;
   token!: string;
   user!: User;
+  created_at!: string;
+  updated_at!: string;
 
   static get tableName() {
 

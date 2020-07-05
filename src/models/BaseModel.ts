@@ -8,12 +8,10 @@ export default class BaseModel extends Model {
   created_at!: string;
   updated_at!: string;
 
-  static get QueryBuilder() {
+  // This register the custom query builder
+  static QueryBuilder = BaseModelQueryBuilder
 
-    // This register the custom query builder
-    return BaseModelQueryBuilder;
-
-  }
+  ;
 
   // Omit fields for json response from model
   $formatJson(instance) {
