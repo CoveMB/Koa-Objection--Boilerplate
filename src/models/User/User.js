@@ -1,7 +1,8 @@
+/* eslint-disable import/order */
+/* eslint-disable no-param-reassign */
 const BaseModel = require('models/BaseModel');
 const validateUserInput = require('./user.validations');
 const UserQueryBuilder = require('./user.queries');
-const { capitalize } = require('utils');
 
 // This plugin allow for automatic password hashing, if you want to allow an empty password you need to pass it allowEmptyPassword (this way user can register and set their password after validating their email)
 const Password = require('objection-password')({
@@ -79,8 +80,8 @@ exports.User = class User extends Password(Unique(BaseModel)) {
 
     delete user.password;
     delete user.admin;
-    delete user.created_at;
-    delete user.updated_at;
+    delete user.createdAt;
+    delete user.updatedAt;
 
     return user;
 
@@ -92,17 +93,13 @@ exports.User = class User extends Password(Unique(BaseModel)) {
     // Validate before password hashing
     validateUserInput(this);
 
-    if (this.country) {
+    // Here you can perform custom formatting
+    // If User where to have a name you could do
+    // if (this.name) {
 
-      this.country = capitalize(this.country);
+    //   this.name = capitalize(this.name);
 
-    }
-
-    if (this.name) {
-
-      this.name = capitalize(this.name);
-
-    }
+    // }
 
     // Super will take care of hashing password
     await super.$beforeInsert(queryContext);
@@ -115,17 +112,13 @@ exports.User = class User extends Password(Unique(BaseModel)) {
     // Validate before password hashing
     validateUserInput(this);
 
-    if (this.country) {
+    // Here you can perform custom formatting
+    // If User where to have a name you could do
+    // if (this.name) {
 
-      this.country = capitalize(this.country);
+    //   this.name = capitalize(this.name);
 
-    }
-
-    if (this.name) {
-
-      this.country = capitalize(this.name);
-
-    }
+    // }
 
     // Super will take care of hashing password
     await super.$beforeUpdate(opt, queryContext);
@@ -136,6 +129,9 @@ exports.User = class User extends Password(Unique(BaseModel)) {
   static get modifiers() {
 
     return {
+
+      // Get modifiers from base class
+      ...super.modifiers,
 
       // This modifier control the data that can be accessed depending of the authenticated user
       graphQLAccessControl(builder, user) {

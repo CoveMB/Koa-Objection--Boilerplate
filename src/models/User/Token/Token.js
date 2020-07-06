@@ -62,11 +62,9 @@ exports.Token = class Token extends BaseModel {
   static get modifiers() {
 
     return {
-      orderByCreation(builder) {
 
-        builder.orderBy('created_at');
-
-      },
+      // Get modifiers from base class
+      ...super.modifiers,
 
       // This modifier control the data that can be accessed depending of the authenticated user
       graphQLAccessControl(builder, user) {

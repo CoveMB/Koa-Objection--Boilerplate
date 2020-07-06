@@ -27,10 +27,8 @@ exports.seed = function(knex) {
           admin: false,
           password
         },
-      ])
-    )
-    .then(() =>
-      knex('token').del())
+      ]))
+    .then(() => knex('token').del())
     .then(() =>
 
     // Inserts seed entries
@@ -43,7 +41,6 @@ exports.seed = function(knex) {
           token  : USER_TOKEN,
           user_id: 2
         }
-      ])
-    );
+      ]));
 
 };
