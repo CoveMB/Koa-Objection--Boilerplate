@@ -1,17 +1,20 @@
 const { Model } = require('objection');
 
-// const BaseModelQueryBuilder = require('./BaseModel.queries');
-
-// const BaseModelQueryBuilder = require('./BaseModel.queries');
-
 class BaseModel extends Model {
 
-  // static get QueryBuilder() {
+  // Modifiers are reusable query snippets that can be used in various places.
+  static get modifiers() {
 
-  //   // This register the custom query builder
-  //   return BaseModelQueryBuilder;
+    return {
+      orderByCreation(builder) {
 
-  // }
+        builder.orderBy('createdAt');
+
+      },
+
+    };
+
+  }
 
   $formatJson(instance) {
 
@@ -28,20 +31,6 @@ class BaseModel extends Model {
   $beforeUpdate() {
 
     this.updatedAt = new Date().toISOString();
-
-  }
-
-  // Modifiers are reusable query snippets that can be used in various places.
-  static get modifiers() {
-
-    return {
-      orderByCreation(builder) {
-
-        builder.orderBy('createdAt');
-
-      },
-
-    };
 
   }
 

@@ -1,7 +1,7 @@
 const { LoginError } = require('config/errors/error.types');
-const BaseModelQueryBuilder = require('models/BaseModel.queries');
+const BaseQueryBuilder = require('models/BaseModel.queries');
 
-class UserQueryBuilder extends BaseModelQueryBuilder {
+class UserQueryBuilder extends BaseQueryBuilder {
 
   async findByCredentials({ email, password }) {
 

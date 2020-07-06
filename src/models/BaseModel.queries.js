@@ -1,6 +1,6 @@
 const { QueryBuilder } = require('objection');
 
-class BaseModelQueryBuilder extends QueryBuilder {
+class BaseQueryBuilder extends QueryBuilder {
 
   async findOrCreate(data) {
 
@@ -27,4 +27,4 @@ class BaseModelQueryBuilder extends QueryBuilder {
 
 }
 
-module.exports = BaseModelQueryBuilder;
+module.exports = BaseQueryBuilder;
