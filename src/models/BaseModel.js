@@ -1,6 +1,14 @@
 const { Model } = require('objection');
+const BaseQueryBuilder = require('./BaseModel.queries');
 
 class BaseModel extends Model {
+
+  static get QueryBuilder() {
+
+    // This register the custom query builder
+    return BaseQueryBuilder;
+
+  }
 
   // Modifiers are reusable query snippets that can be used in various places.
   static get modifiers() {
