@@ -55,7 +55,7 @@ class TokenQueryBuilder extends BaseQueryBuilder {
     }
 
     // Insert the token and relate it to the user
-    return this.insertGraphAndFetch(
+    await this.insertGraph(
       {
         token,
         expiration: date,
@@ -65,6 +65,10 @@ class TokenQueryBuilder extends BaseQueryBuilder {
         relate: true
       }
     );
+
+    return {
+      token, expiration: date
+    };
 
   }
 
