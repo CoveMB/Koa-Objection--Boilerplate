@@ -6,9 +6,9 @@ const { ConfigError } = require('config/errors/error.types');
  */
 const envSchema = joi
   .object({
-    JWT_SECRET     : joi.string().required(),
-    SENDGRID_SECRET: joi.string().required(),
-    EMAIL_FROM     : joi.string()
+    JWT_SECRET         : joi.string().required(),
+    SENDGRID_SECRET    : joi.string().required(),
+    SENDGRID_EMAIL_FROM: joi.string()
       .allow('')
       .optional(),
     SENTRY_DNS: joi.string().uri()
@@ -34,11 +34,11 @@ if (error) {
 
 const secrets = {
 
-  jwtSecret     : envVars.JWT_SECRET,
-  sendGridSecret: envVars.SENDGRID_SECRET,
-  sentryDNS     : envVars.SENTRY_DNS,
-  sentryEnv     : envVars.SENTRY_ENVIRONMENT,
-  emailFrom     : envVars.EMAIL_FROM
+  jwtSecret        : envVars.JWT_SECRET,
+  sendGridSecret   : envVars.SENDGRID_SECRET,
+  sentryDNS        : envVars.SENTRY_DNS,
+  sentryEnv        : envVars.SENTRY_ENVIRONMENT,
+  sendGridEmailFrom: envVars.SENDGRID_EMAIL_FROM
 
 };
 

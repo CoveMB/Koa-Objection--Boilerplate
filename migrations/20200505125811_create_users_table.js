@@ -33,9 +33,6 @@ exports.up = function(knex) {
         .unsigned()
         .primary();
       table
-        .uuid('uuid')
-        .defaultTo(knex.raw('uuid_generate_v4()'));
-      table
         .string('token')
         .notNullable();
       table

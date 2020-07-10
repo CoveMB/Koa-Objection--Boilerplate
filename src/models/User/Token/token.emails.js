@@ -1,6 +1,6 @@
 const { EmailNotSentError } = require('config/errors/error.types');
 const { errorEvent } = require('config/errors/error.event');
-const { emailFrom, clientUrl } = require('config/variables');
+const { sendGridEmailFrom, clientUrl } = require('config/variables');
 const sgMail = require('config/emails');
 
 const sender = emailClient => ({
@@ -10,7 +10,7 @@ const sender = emailClient => ({
 
       await emailClient.send({
         to     : email,
-        from   : emailFrom,
+        from   : sendGridEmailFrom,
         subject: 'Thanks for joining in!',
         html   : `
         <h2>Welcome, please confirm your email</h2>
@@ -31,7 +31,7 @@ const sender = emailClient => ({
 
       await emailClient.send({
         to     : email,
-        from   : emailFrom,
+        from   : sendGridEmailFrom,
         subject: 'Reset your password',
         html   : `
         <h2>Reset your password</h2>

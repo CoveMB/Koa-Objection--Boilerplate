@@ -33,9 +33,9 @@ class TokenQueryBuilder extends BaseQueryBuilder {
   // Generate an auth token for the user
   // By default the token will be temporary
   // If temporary it will have an expiration date
-  async generateAuthToken(user, { _agent }, temporary) {
+  async generateAuthToken(user, { os, browser }, temporary) {
 
-    const token = await jwt.sign({ id: user.id }, jwtSecret);
+    const token = jwt.sign({ id: user.id }, jwtSecret);
 
     // If the token is temporary it will expire in one hour
     let date = null;
@@ -59,7 +59,7 @@ class TokenQueryBuilder extends BaseQueryBuilder {
       {
         token,
         expiration: date,
-        device    : `${_agent.os || 'unknown'} - ${_agent.browser || 'unknown'}`,
+        device    : `${os || 'unknown'} - ${browser || 'unknown'}`,
         user,
       }, {
         relate: true

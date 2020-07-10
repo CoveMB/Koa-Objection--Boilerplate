@@ -10,12 +10,10 @@ exports.authenticated = async(ctx, next) => {
     // Get the bearer token
     const token = ctx.get('Authorization').replace('Bearer ', '');
 
-    let decoded = {};
-
     try {
 
       // Make sure it's valid and get the user id from it
-      decoded = await jwt.verify(token, jwtSecret);
+      jwt.verify(token, jwtSecret);
 
     } catch {
 
