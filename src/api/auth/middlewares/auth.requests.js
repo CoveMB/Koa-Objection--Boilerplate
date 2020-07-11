@@ -1,6 +1,7 @@
 const Joi = require('@hapi/joi');
+const { validateRequest } = require('globalMiddlewares');
 
-exports.loginSchema = Joi.object({
+exports.loginSchema = validateRequest(Joi.object({
   email: Joi
     .string()
     .email()
@@ -8,26 +9,26 @@ exports.loginSchema = Joi.object({
   password: Joi
     .string()
     .required()
-});
+}));
 
-exports.logoutSchema = Joi.object({
+exports.logoutSchema = validateRequest(Joi.object({
   token: Joi
     .string()
     .required()
-});
+}));
 
-exports.logoutAllSchema = Joi.object({
-});
+exports.logoutAllSchema = validateRequest(Joi.object({
+}));
 
-exports.setPasswordSchema = Joi.object({
+exports.setPasswordSchema = validateRequest(Joi.object({
   password: Joi
     .string()
     .required()
-});
+}));
 
-exports.requestResetPasswordSchema = Joi.object({
+exports.requestResetPasswordSchema = validateRequest(Joi.object({
   email: Joi
     .string()
     .email()
     .required()
-});
+}));

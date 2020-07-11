@@ -1,10 +1,10 @@
 const { ValidationError } = require('config/errors/error.types');
 
-exports.validateRequest = (schema, property) => async(ctx, next) => {
+exports.validateRequest = schema => async(ctx, next) => {
 
   try {
 
-    const toValidate = ctx.request[property];
+    const toValidate = ctx.request.body;
 
     await schema.validateAsync(toValidate);
 

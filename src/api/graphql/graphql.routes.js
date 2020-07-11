@@ -1,5 +1,4 @@
-// const controller = require('./graphql.controller');
-const { authenticated, validateRequest } = require('globalMiddlewares');
+const { authenticated } = require('globalMiddlewares');
 const requests = require('./middlewares/graphql.requests');
 const controller = require('./graphql.controller');
 
@@ -12,9 +11,10 @@ module.exports = Router => {
   router
     .post(
       '/',
-      validateRequest(requests.query, 'body'),
+      requests.query,
       authenticated,
-      controller.graphql);
+      controller.graphql
+    );
 
   return router;
 
