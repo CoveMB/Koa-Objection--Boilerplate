@@ -5,7 +5,7 @@ const { userAgent } = require('koa-useragent');
 const cors = require('@koa/cors');
 const { errorEvent, errorHandler } = require('config/errors/error.event');
 const registerRouters = require('api');
-const { log, error } = require('globalMiddlewares');
+const { log, error, authenticated } = require('globalMiddlewares');
 const { corsOptions } = require('config/cors');
 const helmet = require('koa-helmet')();
 
@@ -20,13 +20,14 @@ const configServer = () => {
    * Register global middlewares
   */
 
-  app.use(helmet)            // Provides security headers
+  app.use(helmet)              // Provides security headers
     .use(cors(corsOptions))    // Configure cors
     .use(userAgent)            // Attach user agent to the context
-    .use(bodyParser)         // Parse the body request
+    .use(bodyParser)           // Parse the body request
     .use(log)                  // Log every logRequests
     .use(error)                // Handle trowed errors
-    .use(compress);          // Allow compress
+    .use(compress)             // Allow compress
+    .use(authenticated);       // Makes sure every request are authenticated
 
   /**
    * Register events
