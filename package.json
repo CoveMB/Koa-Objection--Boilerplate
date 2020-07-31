@@ -3,6 +3,7 @@
   "description": "Boilerplate Dockerized Koa app",
   "main": "src/server.js",
   "scripts": {
+    "command": "cd ./commands/ && node --",
     "start": "node src/server.js",
     "dev": "nodemon --inspect=0.0.0.0:9229 --signal SIGTERM --ext js ./src/app.js",
     "debug": "node --inspect-brk=0.0.0.0:9229 ./src/app.js",
