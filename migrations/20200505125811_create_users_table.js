@@ -19,10 +19,17 @@ exports.up = function(knex) {
         .unique()
         .notNullable();
       table
+        .string('name')
+        .nullable();
+      table
+        .string('google_id')
+        .nullable()
+        .unique();
+      table
         .string('password')
         .nullable();
-      table.timestamp('createdAt').defaultTo(knex.fn.now());
-      table.timestamp('updatedAt').defaultTo(null);
+      table.timestamp('created_at').defaultTo(knex.fn.now());
+      table.timestamp('updated_at').defaultTo(null);
 
     })
 
@@ -41,10 +48,14 @@ exports.up = function(knex) {
         .references('user.id')
         .onDelete('CASCADE')
         .index();
-      table.dateTime('expiration').nullable();
-      table.string('device').nullable();
-      table.timestamp('createdAt').defaultTo(knex.fn.now());
-      table.timestamp('updatedAt').defaultTo(null);
+      table.dateTime('expiration')
+        .nullable();
+      table.string('device')
+        .nullable();
+      table.timestamp('created_at')
+        .defaultTo(knex.fn.now());
+      table.timestamp('updated_at')
+        .defaultTo(null);
 
     });
 

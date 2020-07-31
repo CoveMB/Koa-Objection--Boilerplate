@@ -85,7 +85,7 @@ class TokenQueryBuilder extends BaseQueryBuilder {
   async revokeAllAuthTokens(user) {
 
     return this
-      .where({ user_id: user.id })
+      .where({ userId: user.id })
       .delete();
 
   }

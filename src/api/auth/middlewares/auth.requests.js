@@ -32,3 +32,20 @@ exports.requestResetPasswordSchema = validateRequest(Joi.object({
     .email()
     .required()
 }));
+
+exports.registerThirdPartySchema = validateRequest(Joi.object({
+  user: Joi
+    .object({
+      name: Joi
+        .string()
+        .required(),
+      email: Joi
+        .string()
+        .email()
+        .required(),
+      profilePicture: Joi
+        .string(),
+      googleId: Joi
+        .string()
+    })
+}));

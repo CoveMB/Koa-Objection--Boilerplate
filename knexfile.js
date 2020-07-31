@@ -1,5 +1,6 @@
 require('app-module-path').addPath(`${__dirname}/src`);
 const { ConfigError } = require('config/errors/error.types');
+const { knexSnakeCaseMappers } = require('objection');
 const {
   dbHost, dbPort, dbUser, dbPassword, dbName
 } = require('./src/config/variables');
@@ -17,10 +18,8 @@ module.exports = (configType = 'production') => {
         password: dbPassword || undefined,
         database: dbName
       },
-      migrations: {
-        directory: 'migrations',
-      },
       searchPath: [ 'knex', 'public' ],
+      ...knexSnakeCaseMappers()
     };
 
   }
@@ -36,10 +35,8 @@ module.exports = (configType = 'production') => {
         password: dbPassword || undefined,
         database: `${dbName}-test`
       },
-      migrations: {
-        directory: 'migrations',
-      },
       searchPath: [ 'knex', 'public' ],
+      ...knexSnakeCaseMappers()
     };
 
   }

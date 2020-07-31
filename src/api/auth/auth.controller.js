@@ -145,3 +145,34 @@ exports.setPassword = async ctx => {
   }
 
 };
+
+exports.registerThirdParty = async ctx => {
+
+  try {
+
+    const { validatedRequest, records, userAgent } = ctx;
+    const { user } = records;
+
+    // Update with latest google info
+    const updatedUser = await user.$query()
+      .patchAndFetch(validatedRequest.user);
+
+    // Generate JWT token for authentication
+    const token = await Token.query()
+      .generateAuthToken(user, userAgent);
+
+    // And send it back
+    ctx.status = 200;
+    ctx.body = {
+      status: 'success',
+      user  : updatedUser,
+      token
+    };
+
+  } catch (error) {
+
+    ctx.throw(error);
+
+  }
+
+};

@@ -50,3 +50,35 @@ exports.requestResetPasswordRecords = async(ctx, next) => {
   await next();
 
 };
+
+exports.registerThirdPartyRecords = async (ctx, next
+) => {
+
+  try {
+
+    const { validatedRequest } = ctx;
+
+    // Find existing user with email or create it
+    const user = await User
+      .query()
+      .findOrCreate({ email: validatedRequest.user.email });
+
+    // Validate that a user was found
+    validateFoundInstances([
+      {
+        instance: user, type: 'User', search: validatedRequest.user.email as string
+      }
+    ]);
+
+    // Attach it to the context
+    ctx.records = { user };
+
+  } catch (error) {
+
+    ctx.throw(error);
+
+  }
+
+  await next();
+
+};

@@ -66,7 +66,7 @@ exports.User = class User extends Password(Unique(BaseModel)) {
         modelClass: Token,
         join      : {
           from: 'user.id',
-          to  : 'token.user_id'
+          to  : 'token.userId'
         }
       }
     };
