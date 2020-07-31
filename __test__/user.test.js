@@ -1,6 +1,7 @@
 const server = require('config/server')();
 const request = require('supertest')(server.callback());
 const { User } = require('models');
+const { serviceConsumerToken } = require('config/variables');
 const { ValidationError } = require('config/errors/error.types');
 const { setUpDb, tearDownDb } = require('./fixtures/setup');
 const { getFreshToken, getUserData } = require('./fixtures/helper');
@@ -17,6 +18,7 @@ test('Should sign up new user, sending new token by email', async() => {
   // Create user
   const response = await request
     .post('/api/v1/users')
+    .set('Authorization', `Bearer ${serviceConsumerToken}`)
     .send(newUser);
 
   // Query the new user
@@ -51,6 +53,7 @@ test('Should update user', async() => {
   // Create user
   await request
     .post('/api/v1/users')
+    .set('Authorization', `Bearer ${serviceConsumerToken}`)
     .send(newUser);
 
   // Query the new user
@@ -63,6 +66,7 @@ test('Should update user', async() => {
   // Request a user update with the fresh token
   const response = await request
     .patch(`/api/v1/users/${uuid}`)
+    .set('Authorization', `Bearer ${serviceConsumerToken}`)
     .send({
       email: `changed${email}`
     })
@@ -84,7 +88,7 @@ test('Should not update user if invalid field is sent', async() => {
   const { id } = getUserData();
 
   // Get fresh token
-  const token = await getFreshToken(request);
+  const { token } = await getFreshToken(request);
 
   // Send request with invalid field
   const response = await request
@@ -109,6 +113,7 @@ test('Should delete user', async() => {
   // Create user
   await request
     .post('/api/v1/users')
+    .set('Authorization', `Bearer ${serviceConsumerToken}`)
     .send(newUser);
 
   // Query the new user

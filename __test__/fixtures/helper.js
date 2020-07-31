@@ -1,11 +1,12 @@
 const { User } = require('models');
+const { serviceConsumerToken } = require('config/variables');
 
 const testUser = {
   credentials: {
     email   : 'greatemail@exemple.com',
     password: 'P@ssword2000'
   },
-  id: 3,
+  id: 4,
 };
 
 const getUserData = () => ({
@@ -18,6 +19,7 @@ const getFreshToken = async request => {
 
   await request
     .post('/api/v1/login')
+    .set('Authorization', `Bearer ${serviceConsumerToken}`)
     .send({ ...credentials });
 
   const user = await User.query()

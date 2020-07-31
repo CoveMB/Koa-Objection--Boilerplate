@@ -2,6 +2,7 @@
 const bcrypt = require('bcrypt');
 
 const {
+  SERVICE_CONSUMER_TOKEN,
   ADMIN_TOKEN,
   USER_TOKEN,
 } = process.env;
@@ -17,6 +18,11 @@ exports.seed = function(knex) {
     // You need to set your jwt token before
       // Inserts seed entries
       knex('user').insert([
+        {
+          email: 'thirdparty@email.com',
+          admin: false,
+          password
+        },
         {
           email: 'admin@email.com',
           admin: false,
@@ -34,12 +40,16 @@ exports.seed = function(knex) {
     // Inserts seed entries
       knex('token').insert([
         {
-          token  : ADMIN_TOKEN,
+          token  : SERVICE_CONSUMER_TOKEN,
           user_id: 1
         },
         {
-          token  : USER_TOKEN,
+          token  : ADMIN_TOKEN,
           user_id: 2
+        },
+        {
+          token  : USER_TOKEN,
+          user_id: 3
         }
       ]));
 

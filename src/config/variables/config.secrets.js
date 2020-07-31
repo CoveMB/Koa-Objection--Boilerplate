@@ -17,6 +17,7 @@ const envSchema = joi
     SENTRY_ENVIRONMENT: joi.string()
       .allow('')
       .optional(),
+    SERVICE_CONSUMER_TOKEN: joi.string().required(),
   })
   .unknown()
   .required();
@@ -34,11 +35,12 @@ if (error) {
 
 const secrets = {
 
-  jwtSecret        : envVars.JWT_SECRET,
-  sendGridSecret   : envVars.SENDGRID_SECRET,
-  sentryDNS        : envVars.SENTRY_DNS,
-  sentryEnv        : envVars.SENTRY_ENVIRONMENT,
-  sendGridEmailFrom: envVars.SENDGRID_EMAIL_FROM
+  jwtSecret           : envVars.JWT_SECRET,
+  sendGridSecret      : envVars.SENDGRID_SECRET,
+  sentryDNS           : envVars.SENTRY_DNS,
+  sentryEnv           : envVars.SENTRY_ENVIRONMENT,
+  sendGridEmailFrom   : envVars.SENDGRID_EMAIL_FROM,
+  serviceConsumerToken: envVars.SERVICE_CONSUMER_TOKEN
 
 };
 
