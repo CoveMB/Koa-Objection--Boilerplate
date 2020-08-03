@@ -95,11 +95,11 @@ exports.User = class User extends Password(Unique(BaseModel)) {
 
     // Here you can perform custom formatting
     // If User where to have a name you could do
-    // if (this.name) {
+    if (this.email) {
 
-    //   this.name = capitalize(this.name);
+      this.email = this.email.toLowerCase();
 
-    // }
+    }
 
     // Super will take care of hashing password
     await super.$beforeInsert(queryContext);
@@ -114,11 +114,11 @@ exports.User = class User extends Password(Unique(BaseModel)) {
 
     // Here you can perform custom formatting
     // If User where to have a name you could do
-    // if (this.name) {
+    if (this.email) {
 
-    //   this.name = capitalize(this.name);
+      this.email = this.email.toLowerCase();
 
-    // }
+    }
 
     // Super will take care of hashing password
     await super.$beforeUpdate(opt, queryContext);
