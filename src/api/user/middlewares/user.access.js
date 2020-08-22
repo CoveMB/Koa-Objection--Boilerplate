@@ -4,8 +4,7 @@ exports.isSelfOrAdmin = async(ctx, next) => {
 
   try {
 
-    const { params, authenticated } = ctx;
-    const { user } = authenticated;
+    const { params, authenticated: { user } } = ctx;
 
     if (user.uuid === params.uuid || user.admin) {
 

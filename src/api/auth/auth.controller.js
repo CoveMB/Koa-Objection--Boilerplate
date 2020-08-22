@@ -5,8 +5,7 @@ exports.logIn = async ctx => {
 
   try {
 
-    const { userAgent, records } = ctx;
-    const { user } = records;
+    const { userAgent, records: { user } } = ctx;
 
     // Generate JWT token for authentication
     const token = await Token.query()
@@ -91,8 +90,7 @@ exports.requestResetPassword = async ctx => {
 
   try {
 
-    const { userAgent, records } = ctx;
-    const { user } = records;
+    const { userAgent, records: { user } } = ctx;
 
     // Generate JWT token for to send to the email to able password reset
     const temporary = true;
@@ -117,8 +115,7 @@ exports.setPassword = async ctx => {
 
   try {
 
-    const { validatedRequest, userAgent, authenticated } = ctx;
-    const { user } = authenticated;
+    const { validatedRequest, userAgent, authenticated: { user } } = ctx;
 
     // Update the user
     await user.$query()
@@ -150,8 +147,7 @@ exports.registerThirdParty = async ctx => {
 
   try {
 
-    const { validatedRequest, records, userAgent } = ctx;
-    const { user } = records;
+    const { validatedRequest, records: { user }, userAgent } = ctx;
 
     // Update with latest google info
     const updatedUser = await user.$query()

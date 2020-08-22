@@ -98,8 +98,7 @@ exports.updateOne = async ctx => {
   try {
 
     // The user has been fetch in the records middleware
-    const { validatedRequest } = ctx;
-    const { user } = ctx.records;
+    const { validatedRequest, records : { user } } = ctx;
 
     // Update the user
     const updatedUser = await user.$query()
