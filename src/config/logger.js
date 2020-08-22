@@ -1,13 +1,15 @@
 const appRoot = require('app-root-path');
 const winston = require('winston');
 const Sentry = require('winston-sentry-log');
-const { isDevelopment, sentryDNS, sentryEnv } = require('./variables');
+const {
+  isDevelopment, sentryDNS, sentryEnv, appName
+} = require('./variables');
 
 // Base logger
 const logger = winston.createLogger({
   level      : 'info',
   format     : winston.format.json(),
-  defaultMeta: { service: 'api-service' },
+  defaultMeta: { service: `api-service-${appName}` },
 });
 
 // Log to the console
