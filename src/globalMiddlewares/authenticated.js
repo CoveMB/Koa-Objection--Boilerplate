@@ -32,7 +32,7 @@ exports.authenticated = async(ctx, next) => {
     }
 
     // Attach the found user and current token to the response
-    ctx.authenticated = {
+    ctx.state.authenticated = {
       user: foundToken.user, token
     };
 

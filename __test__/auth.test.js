@@ -402,6 +402,8 @@ test('Should login through a third party authentication and update profiles', as
 
   const userTokens = userDb.tokens;
 
+  console.log(response.body);
+
   // The body should contains the new token
   expect(response.body.token.token).toBe(userTokens[0].token);
 

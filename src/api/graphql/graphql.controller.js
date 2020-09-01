@@ -28,7 +28,7 @@ exports.graphql = async ctx => graphqlHTTP({
         runBefore(result, builder) {
 
           // We get the authenticated user from the context (cf authenticated middleware)
-          const { user } = ctx.authenticated;
+          const { user } = ctx.state.authenticated;
 
           try {
 

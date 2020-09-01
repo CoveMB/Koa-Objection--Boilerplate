@@ -5,7 +5,7 @@ exports.logIn = async ctx => {
 
   try {
 
-    const { userAgent, records: { user } } = ctx;
+    const { userAgent, state: { records: { user } } } = ctx;
 
     // Generate JWT token for authentication
     const token = await Token.query()
@@ -30,7 +30,7 @@ exports.logOut = async ctx => {
   try {
 
     // The authenticated middleware attache the user that made the request to the context
-    const { token } = ctx.validatedRequest;
+    const { token } = ctx.state.validatedRequest;
 
     await Token.query().revokeAuthToken(token);
 
@@ -52,7 +52,7 @@ exports.logOutAll = async ctx => {
   try {
 
     // The authenticated middleware attache the user that made the request to the context
-    const { user } = ctx.authenticated;
+    const { user } = ctx.state.authenticated;
 
     await Token.query().revokeAllAuthTokens(user);
 
@@ -90,7 +90,7 @@ exports.requestResetPassword = async ctx => {
 
   try {
 
-    const { userAgent, records: { user } } = ctx;
+    const { userAgent, state: { records: { user } } } = ctx;
 
     // Generate JWT token for to send to the email to able password reset
     const temporary = true;
@@ -115,7 +115,7 @@ exports.setPassword = async ctx => {
 
   try {
 
-    const { validatedRequest, userAgent, authenticated: { user } } = ctx;
+    const { state: { validatedRequest, authenticated: { user } }, userAgent } = ctx;
 
     // Update the user
     await user.$query()
@@ -147,7 +147,7 @@ exports.registerThirdParty = async ctx => {
 
   try {
 
-    const { validatedRequest, records: { user }, userAgent } = ctx;
+    const { state: { validatedRequest, records: { user } }, userAgent } = ctx;
 
     // Update with latest google info
     const updatedUser = await user.$query()

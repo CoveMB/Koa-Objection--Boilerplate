@@ -22,6 +22,9 @@ exports.up = function(knex) {
         .string('name')
         .nullable();
       table
+        .string('profile_picture')
+        .nullable();
+      table
         .string('google_id')
         .nullable()
         .unique();

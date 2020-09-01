@@ -5,12 +5,12 @@ exports.loginRecords = async(ctx, next) => {
 
   try {
 
-    const { validatedRequest } = ctx;
+    const { validatedRequest } = ctx.state;
 
     // Find the user from the send credentials
     const user = await User.query().findByCredentials(validatedRequest);
 
-    ctx.records = { user };
+    ctx.state.records = { user };
 
   } catch (error) {
 
@@ -26,7 +26,7 @@ exports.requestResetPasswordRecords = async(ctx, next) => {
 
   try {
 
-    const { validatedRequest } = ctx;
+    const { validatedRequest } = ctx.state;
 
     // Find the user from the email
     const user = await User.query().findOne(validatedRequest);
@@ -39,7 +39,7 @@ exports.requestResetPasswordRecords = async(ctx, next) => {
     ]);
 
     // Attach it to the context
-    ctx.records = { user };
+    ctx.state.records = { user };
 
   } catch (error) {
 
@@ -51,12 +51,12 @@ exports.requestResetPasswordRecords = async(ctx, next) => {
 
 };
 
-exports.registerThirdPartyRecords = async (ctx, next
+exports.registerThirdPartyRecords = async(ctx, next
 ) => {
 
   try {
 
-    const { validatedRequest } = ctx;
+    const { validatedRequest } = ctx.state;
 
     // Find existing user with email or create it
     const user = await User
@@ -66,12 +66,12 @@ exports.registerThirdPartyRecords = async (ctx, next
     // Validate that a user was found
     validateFoundInstances([
       {
-        instance: user, type: 'User', search: validatedRequest.user.email as string
+        instance: user, type: 'User', search: validatedRequest.user.email
       }
     ]);
 
     // Attach it to the context
-    ctx.records = { user };
+    ctx.state.records = { user };
 
   } catch (error) {
 

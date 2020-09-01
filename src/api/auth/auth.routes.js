@@ -37,6 +37,13 @@ module.exports = Router => {
       '/set-password',
       requests.setPasswordSchema,
       controller.setPassword
+    )
+    .post(
+      '/register-third-party',
+      requests.registerThirdPartySchema,
+      records.registerThirdPartyRecords,
+      controller.registerThirdParty
+
     );
 
   return router;

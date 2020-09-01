@@ -7,7 +7,7 @@ exports.getProfile = async ctx => {
   try {
 
     // The authenticated middleware attache the user that made the request to the context
-    const { user } = ctx.authenticated;
+    const { user } = ctx.state.authenticated;
 
     ctx.body = {
       status: 'success',
@@ -28,7 +28,7 @@ exports.getOne = async ctx => {
   try {
 
     // The user has been fetch in the records middleware
-    const { user } = ctx.records;
+    const { user } = ctx.records.state;
 
     // Send it
     ctx.body = {
@@ -48,7 +48,7 @@ exports.getAll = async ctx => {
   try {
 
     // The users has been fetch in the records middleware
-    const { users } = ctx.records;
+    const { users } = ctx.records.state;
 
     ctx.body = {
       status: 'success', users
@@ -66,7 +66,7 @@ exports.createOne = async ctx => {
 
   try {
 
-    const { validatedRequest, userAgent } = ctx;
+    const { state: { validatedRequest }, userAgent } = ctx;
 
     // Create new user
     const user = await User.query().insert(validatedRequest);
@@ -98,7 +98,7 @@ exports.updateOne = async ctx => {
   try {
 
     // The user has been fetch in the records middleware
-    const { validatedRequest, records : { user } } = ctx;
+    const { state: { validatedRequest, records : { user } } } = ctx;
 
     // Update the user
     const updatedUser = await user.$query()
@@ -123,7 +123,7 @@ exports.deleteOne = async ctx => {
   try {
 
     // Get user from records middleware
-    const { user } = ctx.records;
+    const { user } = ctx.state.records;
 
     // Delete him/her
     await User.query().deleteById(user.id);

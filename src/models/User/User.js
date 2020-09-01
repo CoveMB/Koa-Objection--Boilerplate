@@ -47,6 +47,12 @@ exports.User = class User extends Password(Unique(BaseModel)) {
         },
         admin: {
           type: 'boolean'
+        },
+        googleId: {
+          type: 'string'
+        },
+        profilePicture: {
+          type: 'string'
         }
       }
     };
