@@ -52,4 +52,6 @@ services:
 #Volumes
 volumes:
   postgres:
+    name: ${APP_NAME}-postgres
   pgadmin:
+    name: ${APP_NAME}-pgadmin
